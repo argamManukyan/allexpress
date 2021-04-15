@@ -159,3 +159,17 @@ class CatalogView(View):
     def get(self,request,**kwargs):
         categories = Category.objects.filter(parent__isnull=True)
         return render(request,'shop/catalog.html',locals())
+
+class SearchView(View):
+
+    def get_queryset(self):
+        qs = Product.objects.filter(name__icontains=self.request.GET.get('q')).order_by('?')[:20]
+        return qs
+
+    def get(self,request,**kwargs):
+        products = self.get_queryset()
+        page = request.GET.get('page')
+        paginator = Paginator(products,12)
+        page_product = paginator.get_page(page)
+        q = request.GET.get('q')
+        return render(request,'shop/search.html',locals())
