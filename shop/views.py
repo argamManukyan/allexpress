@@ -96,8 +96,8 @@ class CategoryDetailView(View):
         category = get_object_or_404(Category, slug=kwargs.get('slug'))
         list_categories = [cat.id for cat in category.get_descendants(include_self=False)]
         try:
-            min_pr = Category.objects.aggregate(Min('product__productvariants__price'))['product__productvariants__price__min']
-            max_pr = Category.objects.aggregate(Max('product__productvariants__price'))['product__productvariants__price__max']
+            min_pr = Category.objects.aggregate(Min('product__productvariants__filter_price'))['product__productvariants__filter_price__min']
+            max_pr = Category.objects.aggregate(Max('product__productvariants__filter_price'))['product__productvariants__filter_price__max']
         except:
             pass
             
