@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+{% load mptt_tags %}
 <!DOCTYPE html>
 <html lang="{{LANGUAGE_CODE}}">
 <head>
@@ -47,21 +48,20 @@
                             </div>
                             <nav class="block-content">
                                 <ul>
-                                    {% for sub_cat in subcategories %}
-                                    <li class="sub-menu">
-
-                                        <a href="{{ sub_cat.get_absolute_url }}">
-                                            <img src="{{ sub_cat.icon.url }}" alt="">
-                                            <span>{{ sub_cat }}</span>
+                                    {% recursetree categories %}
+                                    <li {% if not node.is_leaf_node %}class="sub-menu"{% endif %}>
+                                        <a href="{{ node.get_absolute_url }}">
+                                            <span>{{ node.name }}</span>
                                         </a>
-
+                                        {% if not node.is_leaf_node %}
                                         <ul>
-                                            {% for pod in sub_cat.podcategory_set.all %}
-                                            <li><a href="{{ pod.get_absolute_url }}"><span>{{ pod }}</span></a></li>
-                                            {% endfor %}
+                                            <li>
+                                                <a href="{{ children.get_absolute_url }}"><span>{{ children }}</span></a>                                                       
+                                            </li>
                                         </ul>
+                                        {% endif %}
                                     </li>
-                                    {% endfor %}
+                                    {% endrecursetree %}
                                 </ul>
                             </nav>
                         </div>
