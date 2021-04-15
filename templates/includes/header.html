@@ -1,0 +1,219 @@
+{% comment %} Google Tag Manager (noscript)  {% endcomment %}
+<noscript
+  ><iframe
+    src="https://www.googletagmanager.com/ns.html?id=GTM-NQFB9PR"
+    height="0"
+    width="0"
+    style="display: none; visibility: hidden"
+  ></iframe
+></noscript>
+{% load static %} {% load i18n %}
+<header>
+  <div class="top-header">
+    <div class="cnt">
+      <div class="row">
+        <div class="top-left">
+          <ul class="list-inline">
+            <li>
+              <a href="#">
+                <img
+                  src="{% static 'img/icons/location.svg' %}"
+                  class="top-icon"
+                  alt="Քարտեզ"
+                />{% trans 'Աճառյան փողոց 2-րդ նրբանցք, 1 շենք' %}
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <img
+                  src="{% static 'img/icons/phone.svg' %}"
+                  class="top-icon"
+                  alt="{% trans 'Կապ մեզ հետ' %}"
+                />+374 96 77 13 13
+              </a>
+            </li>
+            <li>
+              <a href="#">+374 91 77 12 12</a>
+            </li>
+          </ul>
+        </div>
+        <div class="top-right">
+          <ul class="list-inline">
+            {% if request.user.is_authenticated %}
+            <li>
+              {% if request.user.username != 'allorders' %}
+              <a href="{% url 'profile' %}" style="margin-right: 15px">
+                <img
+                  src="{% static 'img/icons/user.svg' %}"
+                  class="top-icon"
+                  alt="{% trans 'Մուտք' %}"
+                />{% trans 'Իմ հաշիվը' %}
+              </a>
+              {% else %}
+              <a
+                href="{% url 'admin-order'  %}"
+                style="margin-right: 15px"
+                class="orderListAdmin"
+              >
+                <img
+                  src="{% static 'img/icons/user.svg' %}"
+                  class="top-icon"
+                  alt="{% trans 'Մուտք' %}"
+                />{% trans 'Պատվերների ցանկ' %}
+              </a>
+              {% endif %}
+              <a href="{% url 'logout' %}">
+                <img
+                  src="{% static 'img/icons/sign-out.svg' %}"
+                  class="top-icon"
+                  alt="{% trans 'Դուրս գալ' %}"
+                  style="width: 16px"
+                />
+                {% trans 'Ելք' %}
+              </a>
+            </li>
+            {% else %}
+            <li>
+              <a href="{% url 'login' %}">
+                <img
+                  src="{% static 'img/icons/user.svg' %}"
+                  class="top-icon"
+                  alt="Մուտք"
+                />{% trans 'Մուտք / Գրանցում' %}
+              </a>
+            </li>
+            {% endif %}
+            <li class="web_langs">
+              <a href="javascript:void(0);" class="choose">
+                <span class="menus">
+                  <img
+                    src="{% static 'img/icons/armenian.png' %}"
+                    class="langs"
+                    alt="{% trans 'Հայերեն' %}"
+                  />ARM
+                  <img
+                    src="{% static 'img/icons/down.svg' %}"
+                    class="down-icon"
+                    alt=""
+                  />
+                </span>
+              </a>
+              <ul class="choose_lang">
+                <li>
+                  <a href="https://allexpress.am/ru{{ request.get_full_path }}"
+                    ><img
+                      src="{% static 'img/icons/russian.png' %}"
+                      class="langs"
+                      alt="{% trans 'Русский' %}"
+                    />RUS</a
+                  >
+                </li>
+                <li>
+                  <a href="https://allexpress.am/en{{ request.get_full_path }}"
+                    ><img
+                      src="{% static 'img/icons/english.png' %}"
+                      class="langs"
+                      alt="{% trans 'English' %}"
+                    />ENG</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="middle-header">
+    <div class="cnt">
+      <div class="row flex-center-between">
+        <div class="col col-auto d-none">
+          <ul class="head-icons left">
+            <li>
+              <a href="#">
+                <img
+                  src="{% static 'img/icons/mob-menu.svg' %}"
+                  class="menu-bar"
+                  alt="{% trans 'Ցանկությունների ցուցակ' %}"
+                />
+              </a>
+            </li>
+            <li>
+              <a href="javascript:void(0);">
+                <img
+                  src="{% static 'img/icons/mob-search.svg' %}"
+                  id="search-show"
+                  alt="{% trans 'Ցանկությունների ցուցակ' %}"
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col col-auto">
+          <div class="row flex-center-between">
+            <div class="col col-auto">
+              <div class="flex-center-between">
+                <div class="logo">
+                  <a href="{% url 'home' %}"
+                    ><img src="{% static 'img/logo.svg' %}" alt="Allexpress"
+                  /></a>
+                </div>
+                <form
+                  class="search-bar"
+                  action="{% url 'search' %}"
+                >
+                  <span id="search-close">×</span>
+                  <div class="serach-header">
+                    <div class="fast-search">
+                      <input
+                        type="text"
+                        id="searchproduct"
+                        class="fast-search-input"
+                        name="q"
+                        autocomplete="off"
+                        placeholder="{% trans 'Որոնում' %} ..."
+                      />
+                      <button type="submit" id="">
+                        <img src="{% static 'img/icons/search.svg' %}" alt="" />
+                      </button>
+                      <div class="all-lists" id="search-list-items">
+                        <ul id="search_list">
+                          <li class="fast-search-item"></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-auto">
+          <ul class="head-icons">
+            <li class="sale-head">
+              <a href="#" class="button normal">Sale 30%</a>
+            </li>
+            <li>
+              <a href="{% url 'wish' %}">
+                <img
+                  src="{% static 'img/icons/wish.svg' %}"
+                  alt="{% trans 'Ցանկությունների ցուցակ' %}"
+                />
+              </a>
+            </li>
+            <li class="mobile_menu">
+              <a href="{% url 'cart' %}">
+                <img
+                  src="{% static 'img/icons/cart.svg' %}"
+                  alt="{% trans 'Զամբյուղ' %}"
+                />
+                <span id="cart_total_count">{{cart_items}}</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="bottom-margin"></div> 

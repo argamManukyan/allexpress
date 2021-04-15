@@ -1,0 +1,110 @@
+{% comment %} {% load static %}
+
+<div class="mobile_menu_container">
+  <div class="mobile_menu_content">
+    <div class="mob-menu-head">
+      <ul class="mob-langs">
+        <li>
+          <a href="https://allexpress.am/ru{{ request.get_full_path }}"
+            ><img
+              src="{% static 'img/icons/russian.png' %}"
+              alt="{% trans 'Русский' %}"
+            />Рус</a
+          >
+        </li>
+        <li>
+          <a href="https://allexpress.am/en{{ request.get_full_path }}"
+            ><img
+              src="{% static 'img/icons/english.png' %}"
+              alt="{% trans 'English' %}"
+            />Eng</a
+          >
+        </li>
+      </ul>
+      <a href="#" class="close-side-widget"
+        ><img src="{% static 'img/icons/close.svg' %}" alt="{% trans 'Փակել' %}"
+      /></a>
+    </div>
+    <div class="mob-widget-content">
+      <ul class="text-center sign-in-head-mob">
+        {% if request.user.is_authenticated %}
+        <li class="mob-sign-flex">
+          <a href="{% url 'profile' username=request.user.username %}">
+            <img
+              src="{% static 'img/icons/user.svg' %}"
+              class="top-icon"
+              alt="{% trans 'Մուտք' %}"
+            />
+            {% trans 'Իմ հաշիվը' %}
+          </a>
+          <a href="{% url 'logout' %}">
+            <img
+              src="{% static 'img/icons/sign-out.svg' %}"
+              class="top-icon"
+              alt="{% trans 'Դուրս գալ' %}"
+              style="width: 16px"
+            />
+            {% trans 'Ելք' %}
+          </a>
+        </li>
+        {% else %}
+        <li>
+          <a href="{% url 'login' %}"
+            ><img
+              src="{% static 'img/icons/user.svg' %}"
+              class="top-icon"
+              alt="{% trans 'Մուտք' %}"
+              style="width: 20px"
+            />
+            {% trans 'Մուտք / Գրանցում' %}</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+      <ul>
+        {% for category in categories %}
+        <li>
+          <a href="#" class="parent">{{ category.name|capfirst }}</a>
+          <ul>
+            <li><a href="#" class="back">{% trans 'Գնալ հետ' %}</a></li>
+            <li>
+              <a href="{{category.get_absolute_url}}"
+                >{{ category.name|capfirst }}</a
+              >
+            </li>
+            {% for subcategory in category.subcategory_set.all %}
+            <li>
+              <a href="{{subcategory.get_absolute_url}}" class="parent"
+                >{{ subcategory.name|capfirst }}</a
+              >
+              <ul>
+                <li><a href="#" class="back">Գնալ հետ</a></li>
+                {% for podcat in subcategory.podcategory_set.all %}
+                <li>
+                  <a href="{{podcat.get_absolute_url}}"
+                    >{{ podcat.name|capfirst }}</a
+                  >
+                </li>
+                {% endfor %}
+              </ul>
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+        <li><a href="{% url 'mer-masin' %}">{% trans 'Մեր մասին' %}</a></li>
+        <li><a href="{% url 'blog' %}">{% trans 'Բլոգ' %}</a></li>
+        <li><a href="{% url 'inchpes-patvirel' %}">{% trans 'Ինչպես պատվիրել' %}</a></li>
+        <li><a href="{% url 'araqum-ev-vcharum' %}">{% trans 'Առաքում և վճարում' %}</a></li>
+        <li><a href="{% url 'apranqi-veradardz' %}">{% trans 'Ապրանքի վերադարձ' %}</a></li>
+        <li><a href="{% url 'faq' %}"></a>{% trans 'Հաճախակի տրվող հարցեր' %}</a></li>
+        <li><a href="{% url 'policy' %}">{% trans 'Գաղտնիության քաղաքականություն' %}</a></li>
+        <li class="sale-link"><a href="#">Sale 30%</a></li>
+      </ul>
+    </div>
+    <div class="mob-widget-footer">
+      <div class="contact-mb-menu"></div>
+    </div>
+  </div>
+</div>
+<div class="mobile_menu_overlay"></div> {% endcomment %}

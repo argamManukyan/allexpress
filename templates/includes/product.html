@@ -1,0 +1,90 @@
+{% load static %} {% load i18n %}
+
+<div class="product-item">
+    <div class="product-image">
+        <div class="g-flags">
+
+            {% if product.published_timedelta  and product.variants_sale %}
+                <span class="ns-prod prod-new">NEW</span>
+                <span class="ns-prod prod-sale">SALE</span>
+
+            {% elif product.published_timedelta  and product.variants_sale %}
+                <span class="ns-prod prod-new">NEW</span>
+            {% elif product.published_timedelta  and product.variants_sale %}
+
+                <span class="ns-prod prod-sale">SALE</span>
+            {% endif %}
+        </div>
+        {% if '/wish/'  in request.get_full_path %}
+        <span class="delete-of-wifh"
+            onclick="wishList(`{{product.slug}}`)"
+        >×</span>
+        {% else %}
+        <div class="wish-add">
+
+            <img
+                src="{% static 'img/icons/wish-add.svg' %}"
+                id="wish-{{ product.slug }}"
+                class="w-add wishlist-add active"
+                data-slug="{{ product.slug }}"
+                alt=""
+            />
+
+        </div>
+        {% endif %}
+        <a href="{{ product.get_absolute_url }}">
+
+            <img
+                    data-src="http://localhost:8000{{ product.productvariantimages_set.first.image.url }}"
+                    class="only-prod-image lozad"
+                    alt="{{ product.name|capfirst }}"
+            />
+        </a>
+    </div>
+    <div class="product-desc grad-block">
+        <h3 class="product-name">
+            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+        </h3>
+
+        <div class="prod-price">
+            {% if product.productvariants_set.first.sale > 0 %}
+                <span class="old-price">
+        <b>{{ product.productvariants_set.first.price }} <span>AMD</span></b>
+      </span>
+
+                <span class="new-price">
+        <b>{{ product.productvariants_set.first.sale }} <span>AMD</span></b>
+      </span>
+            {% else %}
+
+                <span class="new-price">
+        <b>{{ product.productvariants_set.first.price }} <span>AMD</span></b>
+      </span>
+            {% endif %}
+        </div>
+        <div class="prod-add flex-content-center" id="addToVue">
+            <div class="prod-qty">
+                <div class="number flex-content-center">
+                    <img
+                            src="{% static 'img/icons/minus.svg' %}"
+                            class="minus"
+                            alt=""
+                    />
+                    <input type="text" value="1" min="1" id="qty-{{ product.productvariants_set.first.id }}"/>
+                    <img src="{% static 'img/icons/plus.svg' %}" class="plus" alt=""/>
+                </div>
+            </div>
+
+            <div class="prod-butt">
+                <button
+                        data-id="{{ product.productvariants_set.first.id }}"
+                        type="button"
+                        class="add-cart flex-content-center submit_btn">
+                    <img src="{% static 'img/icons/prod-but.svg' %}"/>
+                    {% trans 'Ավելացնել' %}
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div> 

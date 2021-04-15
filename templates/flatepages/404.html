@@ -1,0 +1,90 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans '404 Էջը չի գտնվել' %}} | Allexpress.am</title>
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+  </head>
+
+  <body>
+  {% include 'includes/header.html' %} 
+   
+    <!-- Main content -->
+    <main id="content" role="main">
+      <!-- register page-->
+      <section class="404-page">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <!-- 404 -->
+              <div class="not-found text-center">
+                <div class="error-inner">
+                  <div class="error-container">
+                    <div class="error-page">
+                      <h2 class="error-title">4<span></span>4</h2>
+                      <h5>{% trans '}Էջը չի գտնվել' %</h5>
+                      <p>
+                        {% trans 'Ստուգեք URL- ի ճշտությունը: Եթե վստահ եք ձեր գործողություններում, դիմեք մեզ՝' %}
+                        
+                        <b>info@allexpress.am</b>
+                      </p>
+                      <div class="">
+                        <a href="{% url 'home' %}" class="button normal dark"
+                          >{% trans 'ԴԵՊԻ ԳԼԽԱՎՈՐ ԷՋ' %}</a
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 404 end -->
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- register page end -->
+    </main>
+    <!-- Main content end -->
+
+    <!-- Footer -->
+        {% include 'includes/footer.html' %} {%
+        {% include 'includes/menu.html' %}
+   
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

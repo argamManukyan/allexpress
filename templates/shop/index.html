@@ -1,0 +1,291 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans 'Գրենական և տնտեսական ապրանքներ' %} | Allexpress.am</title>
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/swiper.css' %}" />
+  </head>
+
+  <body>
+    {% include 'includes/header.html' %}
+    <!-- Main content -->
+    <main id="content" role="main">
+      <!-- Slide+cats -->
+      <section class="slider-main">
+        <div class="cnt">
+          <div class="row">
+            <div class="col col-a">
+              <div class="shop-categories-one">
+                <div class="block-title align-items-center">
+                  <img src="{% static 'img/icons/bar.svg' %}" />{% trans "Բաժիններ" %}
+                  
+                </div>
+                <nav class="block-content">
+                  <ul>
+                  {% for subcategory in categories_menu|slice:'11' %}
+                    <li>
+                      <a href="{{ subcategory.get_absolute_url }}">
+                        <!-- <img src="{{subcategory.icon.url}}" /> -->
+                        <span>{{ subcategory.name }}</span>
+                      </a>
+                      <img
+                        src="{% static 'img/icons/cat-down.svg' %}"
+                        class="cat-left"
+                      />
+                    </li>
+
+                    {% endfor %}
+                    <li>
+                      <a href="{% url 'catalog' %}">
+                        <span>{% trans 'Տեսնել Բոլորը' %}</span>
+                      </a>
+                      <img
+                        src="{% static 'img/icons/cat-down.svg' %}"
+                        class="cat-left"
+                      />
+                    </li> 
+                  </ul>
+                </nav>
+              </div>
+            </div>
+         
+            <div class="col col-b">
+              <div class="head-slide">
+                <div class="swiper-container main-slide">
+                  <div class="swiper-wrapper">
+                    {% for slide in sliders %} 
+                      {% include "includes/slider.html" %}
+                    {% endfor %}
+                  </div>
+                  <div class="swiper-pagination"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Slide+cats end -->
+
+      <!--category banners-->
+      <div class="cat-banner">
+        <div class="cnt">
+          <div class="row">
+            {% for category in main_categories %} 
+              {% include 'includes/main-categories.html' %} 
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <!--category banners end -->
+
+      <!--New Products-->
+      <section class="new-items">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="gcarousel">
+                <div class="goods-list">
+                  <div class="swiper-container slider-4">
+                    <div class="slide-tit">
+                      <h3><span>{% trans "Նորույթ" %}</span></h3>
+                      <div class="swiper-button-prev"></div>
+                      <div class="swiper-button-next"></div>
+                    </div>
+                    <div class="swiper-wrapper">
+                      {% for product in latest_products %}
+                      <div class="swiper-slide">
+                        {% include 'includes/product.html' %}
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--New Products end -->
+
+      <!--Hot Offers-->
+      {% if offers_own %}
+      
+       <section class="banners">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="main-tit">
+                <div class="slide-tit">
+                  <h3><span>{% trans "Հատուկ առաջարկ" %}</span></h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            {% for offer in offers_own %} 
+              {% include 'includes/special-offer.html' %} 
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      {% endif %}
+     
+      <!--Hot Offers end -->
+
+      <!--sale Products-->
+
+      <section class="new-items">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="gcarousel">
+                <div class="goods-list">
+                  <div class="swiper-container slider-4">
+                    <div class="slide-tit">
+                      <h3><span>{% trans "Զեղչված տեսականի" %}</span></h3>
+                      <div class="swiper-button-prev"></div>
+                      <div class="swiper-button-next"></div>
+                    </div>
+                    <div class="swiper-wrapper">
+                      {% for product in sales_products %}
+                      <div class="swiper-slide">
+                        {% include 'includes/product.html' %}
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {% if offers_two %}
+      <section class="banners">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="main-tit">
+                <div class="slide-tit">
+                  <h3>
+                    <span>{% trans "Հատուկ առաջարկ" %}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            {% for offer in offers_two %} 
+              {% include 'includes/special-offer.html' %}
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+      <!--Top Sold-->
+      <section class="top-sold">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="gcarousel">
+                <div class="goods-list">
+                  <div class="swiper-container slider-4">
+                    <div class="slide-tit">
+                      <h3><span>{% trans "Հայտնի ապրանքներ" %}</span></h3>
+                      <div class="swiper-button-prev"></div>
+                      <div class="swiper-button-next"></div>
+                    </div>
+
+                    <div class="swiper-wrapper">
+                      {% for product in popular_products %}
+                      <div class="swiper-slide">
+                        {% include 'includes/product.html' %}
+                      </div>
+
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--Top Sold end -->
+
+      <!--Blog-->
+      <section class="main-blog">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="main-tit">
+                <div class="slide-tit">
+                  <h3><span>{% trans "Բլոգ" %}</span></h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            {% for post in posts %} 
+              {% include 'includes/blog.html' %} 
+            {% endfor%}
+            
+          </div>
+        </div>
+      </section>
+      <!--Blog end -->
+    </main>
+    <!-- Main content end -->
+    {% include 'includes/footer.html' %}
+    <!--Menu end -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+    <script src="{% static 'javascript/add-to-cart.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/swiper-express.js' %}"></script>
+    <script src="{% static 'js/swiper.min.js' %}"></script>
+    <script>
+      if (!!window.performance && window.performance.navigation.type === 2) {
+        document.location.reload();
+      }
+    </script>
+  </body>
+</html>
+
+

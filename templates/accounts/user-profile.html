@@ -1,0 +1,437 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({"gtm.start": new Date().getTime(), event: "gtm.js"});
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != "dataLayer" ? "&l=" + l : "";
+            j.async = true;
+            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans 'Բարի գալուստ' %} | Allexpress.am</title>
+    <meta name="Description" content=""/>
+    <link rel="shortcut icon" href="{% static ' img/favicon.ico' %}"/>
+    <script
+            type="text/javascript"
+            src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}"/>
+</head>
+
+<body>
+<!-- Header -->
+
+<!-- Google Tag Manager (noscript) -->
+
+{% include "includes/header.html" %}
+
+<!-- End Google Tag Manager (noscript) -->
+
+<!-- Main content -->
+<main id="content" role="main">
+    <!-- cats banners -->
+    <section class="user-page">
+        <div class="cnt">
+            <div class="row">
+                <div class="col col-4">
+                    <div class="tabs-head"><span>{% trans 'Իմ հաշիվը' %}</span></div>
+                    <ul class="tabs personal-page">
+                        <li class="col-auto align-items-center active" rel="tab1">
+                            <img
+                                    src="{% static 'img/icons/customer.svg' %}"
+                                    alt="{% trans 'Անձնական տվյալներ' %}"
+                            /><span>{% trans 'Անձնական տվյալներ' %}</span>
+                        </li>
+                        <li class="col-auto align-items-center" rel="tab2">
+                            <img
+                                    src="{% static 'img/icons/order.svg' %}"
+                                    alt="{% trans 'Իմ պատվերները' %}"
+                            /><span>{% trans 'Իմ պատվերները' %}</span>
+                        </li>
+
+                        <li class="col-auto align-items-center ch_pas_last" rel="tab3">
+                            <img
+                                    src="{% static 'img/icons/lock.svg' %}"
+                                    alt="{% trans 'Փոխել գաղտնաբառը' %}"
+                            /><span>{% trans 'Փոխել գաղտնաբառը' %}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col col-9">
+                    <div class="tab_container p-g">
+                        <!-- #tab1 -->
+                        <div id="tab1" class="tab_content">
+                            <div class="all-head-info">
+                                <div class="slide-tit">
+                                    <h3><span>{% trans 'Անձնական տվյալներ' %}</span></h3>
+                                </div>
+                                <div class="mess__class">
+                                
+                                  {% if messages %}
+                                      {% for message in messages %}
+                                          {% if message.tags == 'success' %}
+                                              <h4 class="suc-change">{{ message }}</h4>
+                                          {% else %}
+                                              <h4 class="suc-change war-change">{{ message }}</h4>
+                                          {% endif %}
+                                      {% endfor %}
+                                  {% endif %}
+                                </div>
+
+                                <div class="profile-info accountInfo">
+                                    <ul>
+                                        <li class="align-items-center">
+                                            <span class="profile-row-name">id:</span>
+                                            <span class="profile-row-content">{{ user.id }}</span>
+                                        </li>
+                                        <li class="align-items-center">
+                          <span class="profile-row-name"
+                          >{% trans "Անուն ազգանուն" %}</span
+                          >
+                                            <span class="profile-row-content"
+                                            >{{ user.first_name }} {{ user.last_name }}</span
+                                            >
+                                        </li>
+                                        <li class="align-items-center">
+                                            <span class="profile-row-name">E-mail:</span>
+                                            <span class="profile-row-content"
+                                            >{{ user.email }}</span
+                                            >
+                                        </li>
+                                        <li class="align-items-center">
+                          <span class="profile-row-name"
+                          >{% trans "Հեռախոսահամար" %}:</span
+                          >
+                                            <span class="profile-row-content"
+                                            >{{ user.phone }}</span
+                                            >
+                                        </li>
+                                        <li class="align-items-center">
+                          <span class="profile-row-name"
+                          >{% trans "Հասցե" %}:</span
+                          >
+                                            <span class="profile-row-content"
+                                            >{{ user.address }}</span
+                                            >
+                                        </li>
+                                        <li class="align-items-center">
+                          <span class="profile-row-name"
+                          >{% trans "Վերջին մուտք" %}:</span
+                          >
+                                            <span class="profile-row-content"
+                                            >{{ user.last_login|date:'d-m-Y h:i' }}</span
+                                            >
+                                        </li>
+                                        <li class="align-items-center">
+                          <span class="profile-row-name"
+                          >{% trans "Գրանցման ամսաթիվ" %}:</span
+                          >
+                                            <span class="profile-row-content"
+                                            >{{ user.date_joined|date:'d-m-Y h:i' }}</span
+                                            >
+                                        </li>
+                                    </ul>
+                                    <div class="change-infos">
+                                        <a
+                                                href="javascript:void(0);"
+                                                id="changeInfo"
+                                                class="button big light cahnge_but"
+                                        ><img
+                                                src="{% static 'img/icons/edit.svg' %}"
+                                                alt="{% trans 'Փոփոխել տվյալները' %}"
+                                        />{% trans 'Փոփոխել տվյալները' %}</a
+                                        >
+                                    </div>
+                                </div>
+
+                                <!--	popoxel andznakan tvyalner@ -->
+                                <div class="changeAccount" style="display: none">
+                                    <div class="head-changes flex-center-between">
+                                        <h4><b>{% trans 'Փոփոխել անձնական տվյալները' %}</b></h4>
+                                        <h4 class="closeChanges">
+                                            <b>{% trans 'Չեղարկել գործարքը' %}</b
+                                            ><img
+                                                src="/static/img/icons/close.svg"
+                                                alt="{% trans 'Փակել' %}"
+                                        />
+                                        </h4>
+                                    </div>
+
+                                    <form
+                                            action=""
+                                            method="POST"
+                                            id="change-info-user"
+                                            novalidate="novalidate"
+                                    >
+                                        {% csrf_token %}
+                                        <div>
+                                            <div class="allexpress-form-group">
+                                                <input
+                                                        type="text"
+                                                        name="name"
+                                                        placeholder="Անուն ազգանուն"
+                                                        value="{{ user.first_name }} {{ user.last_name }}"
+                                                        required
+                                                />
+                                                <span class="errorMessage"></span>
+                                            </div>
+
+                                            <div class="allexpress-form-group">
+                                                <input
+                                                        type="text"
+                                                        name="address"
+                                                        value="{{ user.address }}"
+                                                        placeholder="Հասցե"
+                                                        required
+                                                />
+                                                <span class="errorMessage"></span>
+                                            </div>
+                                            <div class="allexpress-form-group">
+                                                <input  
+                                                        id="phonenumber"
+                                                        type="text"
+                                                        name="phone"
+                                                        value="{{ user.phone }}"
+                                                        pattern="+374\([0-9]{2}\)[0-9]{2}-[0-9]{2}-[0-9]{2}"
+                                                        maxlength="30"
+                                                        placeholder="+374 (__) __-__-__"
+                                                />
+
+                                                <span class="errorMessage"></span>
+                                            </div>
+                                            <div class="allexpress-form-group">
+                                                <input
+                                                        type="submit"
+                                                        class="btn btn-primary"
+                                                        name="submit"
+                                                        value="{% trans 'Հաստատել' %}"
+                                                />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!--	popoxel andznakan tvyalner@ end -->
+                            </div>
+                        </div>
+                        <!-- #tab2 -->
+                        <div id="tab2" class="tab_content" style="display: none">
+                            <div class="all-head-info">
+                                <div class="slide-tit">
+                                    <h3><span>Իմ պատվերները</span></h3>
+                                </div>
+                            </div>
+                            <div id="order-table">
+                                <!-- եթե չկան պատվերներ-->
+
+                                <!-- եթե չկան պատվերներ end -->
+                                <table class="orders-table">
+                                    <thead>
+                                    <tr class="order-head">
+                                        <th class="order-item-nom" width="1%">№</th>
+                                        <th class="order-head-code">Պատվերի կոդ</th>
+                                        <th class="order-head-cnt nowrap" width="1%">
+                                            Քանակ
+                                        </th>
+                                        <th class="order-head-sum" width="1%">Ընդհանուր</th>
+                                        <th class="order-head-day" width="1%">Ամսաթիվ</th>
+                                        <th class="order-head-more" width="1%">Մանրամասն</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr id="order-item-1" class="order-item4">
+                                        <td class="order-item-nom clr">
+                                            <span class="order-name-mobile">№</span>
+                                            <span class="right-orders"><b>1</b></span>
+                                        </td>
+                                        <td class="order-item-code clr">
+                                            <span class="order-name-mobile">Պատվերի կոդ</span>
+                                            <span class="right-orders"><b>4</b></span>
+                                        </td>
+                                        <td class="order-item-cnt clr">
+                                            <span class="order-name-mobile">Քանակ</span>
+                                            <span class="right-orders"> <b>1</b></span>
+                                        </td>
+                                        <td class="order-item-sum nowrap clr">
+                                            <span class="order-name-mobile">Ընդհանուր</span>
+                                            <span class="right-orders">2800<span>֏</span></span>
+                                        </td>
+                                        <td class="order-item-day nowrap clr">
+                                          <span class="order-name-mobile"
+                                          >Պատվիրման ամսաթիվ</span >
+                                          <span class="right-orders"
+                                            >28-04-2020 23:00<br
+                                            /></span>
+                                        </td>
+                                        <td class="order-item-more nowrap clr">
+                                            <a href="/order/4/" class="button small dark"
+                                            >Մանրամասն</a
+                                            >
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="tab3" class="tab_content" style="display: none;">
+                            <div class="all-head-info">
+                                <div class="slide-tit">
+                                    <h3><span>Փոխել գաղտնաբառը</span></h3>
+                                </div>
+                            </div>
+
+                            <div class="all-form-wrap">
+                                <div class="all-forms-items">
+                                    <ul class="form_tabs align-items-center">
+                                        <li class="form_item">
+                                            <a href="javascript:void(0)" class="active new-pass"
+                                            >Փոխել գաղտնաբառը</a
+                                            >
+                                        </li>
+                                    </ul>
+                                    <div class="only_form">
+                                      
+                                        <form
+                                                action="{% url 'password-change' %}"
+                                                method="POST"
+                                                id="change-form"
+                                                novalidate="novalidate"
+                                        >
+                                            {% csrf_token %}
+
+                                            <div>
+                                                <div class="allexpress-form-group">
+                                                    <p class="forgot-info">
+                                                        <img
+                                                                src="{% static 'img/icons/info.svg' %}"
+                                                                alt="{% trans 'Զրոյացնել գաղտնաբառը' %}"
+                                                        />
+                                                        {% blocktrans %}
+                                                            Խնդրում ենք մուտքագրել Ձեր հին գաղտնաբառը և նոր
+                                                            գաղտնաբառը կրկնակի, որպեսզի համոզվենք տպագրման
+                                                            ճշգրտության մեջ:{% endblocktrans %}
+                                                    </p>
+                                                </div>
+                                                <div class="allexpress-form-group">
+                                                    <input
+                                                            type="password"
+                                                            id="Oldpassword"
+                                                            name="old_password"
+                                                            placeholder="{% trans 'Հին գաղտնաբառ' %} *"
+                                                    />
+                                                    <span class="errorMessage"></span>
+                                                </div>
+                                                <div class="allexpress-form-group">
+                                                    <input
+                                                            type="password"
+                                                            id="id_new_password1"
+                                                            name="new_password1"
+                                                            placeholder="{% trans 'Նոր գաղտնաբառ' %} *"
+                                                    />
+                                                    <span class="errorMessage"></span>
+                                                </div>
+                                                <div class="allexpress-form-group">
+                                                    <input
+                                                            type="password"
+                                                            id="id_new_password2"
+                                                            name="new_password2"
+                                                            placeholder="{% trans 'Հաստատել գաղտնաբառը' %} *"
+                                                    />
+                                                    <span class="errorMessage"></span>
+                                                </div>
+                                                <div class="allexpress-form-group">
+                                                    <input
+                                                            type="submit"
+                                                            class="btn btn-primary"
+                                                            name="submit"
+                                                            value="{% trans 'Հաստատել' %}"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- cats banners end -->
+</main>
+<!-- Main content end -->
+{% include "includes/footer.html" %}
+<!-- Footer -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="{% static 'js/script.js' %} "></script>
+<script src="{% static 'js/plugs.js' %} "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+
+
+<script>
+$("#phonenumber").mask("+374 (99) 99 99 99");
+    $("#changeInfo").click(function () {
+        $(".accountInfo").slideUp("fast");
+        $(".changeAccount").slideDown("fast");
+    });
+    $(".closeChanges").click(function () {
+        $(".accountInfo").slideDown("fast");
+        $(".changeAccount").slideUp("fast");
+    });
+    $(function () {
+        $('#change-form').validate({
+            rules: {
+                old_password: {
+                    required: true
+                }
+                , new_password1: {
+                    required: true
+                    , minlength: 8
+                }
+                , new_password2: {
+                    required: true,
+                    equalTo: '#id_new_password1'
+                }
+            }
+            , messages: {
+                old_password: {
+                    required: "{% trans 'Հին գաղտնաբառ դաշտը պարտադիր է լրացման համար' %}"
+                }
+                , new_password1: {
+                    required: "{% trans 'Գաղտնաբառ դաշտը պարտադիր է լրացման համար' %}"
+                    , minlength: "{% trans 'Գաղտնաբառը պետք է լինի 8 նիշ կամ ավելի երկար ' %}"
+                }
+                , new_password2: {
+                    required: "{% trans 'Գաղտնաբառի հաստատում դաշտը պարտադիր է լրացման համար' %}",
+                    equalTo: "{% trans 'Գաղտնաբառը չի համապատասխանում' %}"
+                }
+            }
+        });
+
+    });
+
+    
+    
+
+</script>
+</body>
+</html>

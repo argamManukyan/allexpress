@@ -1,0 +1,122 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NQFB9PR');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% trans 'Գրենական և տնտեսական ապրանքների առաքում' %} | Allexpress.am</title>
+    <meta name="Description" content="">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+
+</head>
+
+<body>
+
+    {% include 'includes/header.html' %}
+    <!-- Main content -->
+    <main id="content" role="main">
+        <!-- cats banners -->
+        <section class="catalog-page">
+            <div class="cnt">
+                <div class="row">
+                    <div class="col">
+                        <div class="shop-title-h1">
+                            <h1><span>{% trans 'Բաժիններ' %}</span></h1>
+                        </div>
+                        <div id="breadcrumb">
+                            <ul class="breadcrumbs-list">
+                                <li class="b-list-item">
+                                    <a href="{% url 'home' %}" class="b-list-link">{% trans 'Գլխավոր' %}</a>
+                                    <img src="{% static 'img/icons/b-l.svg' %}" alt="Bredcrumbs icon">
+                                </li>
+                                <li class="b-list-item">
+                                    <meta itemprop="position" content="1">
+                                    <span itemprop="name">{% trans 'Բաժիններ' %}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col">
+
+                        <div class="full-desc-categories">
+                            <ul class="tabs row">
+                                {% for category in categories %}
+                                    {% if forloop.first %}
+                                    <li class="col-2 first_tab active" rel="tab{{forloop.counter}}">
+                                        <span>{{category|capfirst}}</span></li>
+                                    {% else %}
+                                    <li class="col-2 last_tab tab_last" rel="tab{{forloop.counter}}">
+                                        <span>{{category|capfirst}}</span></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                        {% for category in categories %}
+                        <div class="tab_container">
+                            <!--tab1 -->
+                            <div id="tab{{forloop.counter}}" class="tab_content">
+                                <div class="row full-ban">
+                                    {% for child_big in category.children.all %}
+                                    <div class="col col-3">
+                                        <div class="full-cat-banner">
+                                            <div class="cat-banner-img text-center">
+                                                <img src="{{child_big.image.url}}" alt="">
+                                            </div>
+                                            <div class="cat-banner-name">
+                                                <h3>
+                                                    <a href="{{ child_big.get_absolute_url }}">{{child_big.name}}<img
+                                                            src="{% static 'img/icons/banner-right.svg' %}" alt=""></a>
+                                                </h3>
+                                                {% if child_big.children.count %}
+                                                <ul class="ful-sub-cat">
+                                                    {% for child_small in child_big.children.all %}
+                                                    <li><a href="{{ child_small.get_absolute_url }}">{{child_small.name}}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+        </section>
+        <!-- cats banners end -->
+    </main>
+    <!-- Main content end -->
+
+    {% include 'includes/footer.html' %}
+    {% include 'includes/menu.html' %}
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/plugs.js' %}"></script>
+
+</body>
+
+</html>

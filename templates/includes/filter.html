@@ -1,0 +1,219 @@
+{% load i18n static %}
+<div class="filter-widget-content">
+    <div class="params-on-tit">
+        <h4><span>{% trans "Ֆիլտրեր" %}</span></h4>
+    </div>
+    <form method="GET" id="filter" @change.prevent="filter" >
+        <div class="filter-params active">
+            <div class="filter-params-title">
+                <h4 class="filter-params-hint flex-center-between">
+                    {% trans 'Գին' %}
+                    <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                </h4>
+            </div>
+            <div class="filter-params-content">
+                <div class="box-list">
+                    <div class="range_slid flex-center-evenly">
+                        <span>{% trans 'Մին' %}.<br/>
+                            <input type="number" id="min_price" min="0" name="min_price" max="" 
+                            value="{% if min_pr > 0 %}{{min_pr}}{% endif %}"/>
+                        </span>
+                        <span>{% trans 'Մաքս' %}.<br/>
+                            <input type="number" id="max_price" min="0" name="max_price" max="" 
+                            value="{% if max_pr > 0 %}{{max_pr}}{% endif %}"
+                            />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if brands.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Ապրանքանիշ' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for brand in brands %}
+                            <label for="id_brand_{{ brand.id }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_brand_{{ brand.id }}"
+                                       value="{{ brand.id }}"
+                                       type="checkbox"
+                                       name="brand"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ brand.name|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if sorts.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Տեսակ' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for sort in sorts %}
+                            <label for="id_sort_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_sort_{{ forloop.counter }}"
+                                       value="{{ sort.sort }}"
+                                       type="checkbox"
+                                       name="sort"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ sort.sort|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if powers.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Հզորություն' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for power in powers %}
+                            <label for="id_power_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_power_{{ forloop.counter }}"
+                                       value="{{ power.power }}"
+                                       type="checkbox"
+                                       name="power"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ power.power|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if volumes.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Ծավալ' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for volume in volumes %}
+                            <label for="id_volume_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_volume_{{ forloop.counter }}"
+                                       value="{{ volume.volume }}"
+                                       type="checkbox"
+                                       name="volume"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ volume.volume|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if sizes.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Չափս' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for size in sizes %}
+                            <label for="id_size_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_size_{{ forloop.counter }}"
+                                       value="{{ size.productvariants__size }}"
+                                       type="checkbox"
+                                       name="size"
+                                {% if size.productvariants__size in request.get_full_path %}checked{% endif %}
+                                />
+                                <span class="checkbox-square"></span>
+                                <span>{{ size.productvariants__size|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if weights.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Քաշ' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for weight in weights %}
+                            <label for="id_weight_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_weight_{{ forloop.counter }}"
+                                       value="{{ weight.weight }}"
+                                       type="checkbox"
+                                       name="weight"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ weight.weight|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        {% if colors.count > 0 %}
+            <div class="filter-params">
+                <div class="filter-params-title">
+                    <h4 class="filter-params-hint flex-center-between">
+                        {% trans 'Գույն' %}
+                        <img src="{% static 'img/icons/cat-down.svg' %}" class="cat-left"/>
+                    </h4>
+                </div>
+                <div class="filter-params-content">
+                    <div class="box-list">
+                        {% for color in colors %}
+                            <label for="id_color_{{ forloop.counter }}"
+                                   class="checkbox-design align-items-center">
+                                <input id="id_color_{{ forloop.counter }}"
+                                       value="{{ color.id }}"
+                                       type="checkbox"
+                                       name="color"/>
+                                <span class="checkbox-square"></span>
+                                <span>{{ color.name|capfirst }}</span>
+                            </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="filter-submit">
+            <button type="submit">Ֆիլտրել</button>
+        </div>
+    </form>
+</div>

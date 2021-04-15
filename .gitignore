@@ -1,0 +1,10 @@
+.idea/
+env/
+__pycache__/
+migrations/*
+.env
+db.sqlite2
+TODO.txt
+static/
+# static_dev/
+media/

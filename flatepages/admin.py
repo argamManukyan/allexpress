@@ -1,0 +1,13 @@
+from django.contrib import admin
+from modeltranslation.admin import TabbedDjangoJqueryTranslationAdmin
+
+from .models import *
+
+admin.site.register(FAQ,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(AboutUs,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(DeliveryAndPayment,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(TermsAndConditions,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(PrivacyAndPolicy,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(ReturnProduct,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(HowOrder,TabbedDjangoJqueryTranslationAdmin)
+admin.site.register(Blog,TabbedDjangoJqueryTranslationAdmin)

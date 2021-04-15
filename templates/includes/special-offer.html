@@ -1,0 +1,30 @@
+{% load static i18n %}
+<div class="col col-2">
+  <div class="offer-block">
+    <div class="offer-left">
+      <img
+        src="{% static 'img/icons/hot-icon.png' %}"
+        class="hot-sale"
+        alt="Հատուկ առաջարկ"
+      />
+      <div class="name-desc-price">
+        <h2>{{offer.name}}</h2>
+        <p>{{offer.description}}</p>
+        <div class="offer-price">
+          <div class="prod-price">
+            <span class="old-price">
+              <b>2050<span>AMD</span></b>
+            </span>
+            <span class="new-price">
+              <b>1990<span>AMD</span></b>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offer-right">
+      <img src="{% static 'img/hot-1.png' %}" alt="{{offr.name}}" />
+      <a href="#" class="button normal dark">{% trans "Մանրամասն" %}</a>
+    </div>
+  </div>
+</div>

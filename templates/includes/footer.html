@@ -1,0 +1,154 @@
+{% load static i18n %}
+<footer>
+  <div class="cnt">
+    <div class="row foot-flex">
+      <div class="col col-auto">
+        <div class="footer-item">
+          <h4>{% trans 'Կապ մեզ հետ' %}</h4>
+          <div class="items-all">
+            <ul>
+              <li>
+                <a href="javascript:void(0);"
+                  >{% trans 'Աճառյան փողոց <br />2-րդ նրբանցք, 1 շենք' %}</a
+                >
+              </li>
+              <li><a href="javascript:void(0);">+ 374 10 66 20 52</a></li>
+              <li><a href="javascript:void(0);">info@allexpress.am</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col col-auto">
+        <div class="footer-item">
+          <h4>{% trans 'Ինֆորմացիոն' %}</h4>
+          <div class="items-all">
+            <ul>
+              <li><a href="{% url 'blog' %}">{% trans 'Բլոգ' %}</a></li>
+              <li><a href="{% url 'about-us' %}">{% trans 'Մեր մասին' %}</a></li>
+              <li>
+                <a href="{% url 'delivery-and-payment' %}">{% trans 'Առաքում և վճարում' %}</a>
+              </li>
+              <li>
+                <a href="{% url 'return_proces' %}">{% trans 'Ապրանքի վերադարձ' %}</a>
+              </li>
+              <li><a href="{% url 'faq' %}">{% trans 'Հաճախակի տրվող հարցեր' %}</a></li>
+              <li>
+                <a href="{% url 'privacy-policy' %}">{% trans 'Գաղտնիության քաղաքականություն' %}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col col-auto">
+        <div class="footer-item">
+          <h4>{% trans 'Օգտակար հղումներ' %}</h4>
+          <div class="items-all">
+            <ul>
+              <li><a href="#">{% trans 'Ծրարներ' %}</a></li>
+              <li><a href="#">{% trans 'Թուղթ օֆիսի համար' %}</a></li>
+              <li><a href="#">{% trans 'Պատճենահանող թուղթ' %}</a></li>
+              <li><a href="#">{% trans 'Աշակերտական տետրեր' %}</a></li>
+              <li><a href="#">{% trans 'Արխիվային թղթապանակներ' %}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col col-auto">
+        <div class="footer-item">
+          <h4>{% trans 'Անձնական էջ' %}</h4>
+          <div class="items-all">
+            <ul>
+              {% if request.user.is_authenticated %}
+              <li>
+                <a href="{% url 'profile' %}"
+                  >{% trans 'Իմ պրոֆիլ' %}</a
+                >
+              </li>
+              <li><a href="{% url 'logout' %}">Ելք</a></li>
+              {% else %}
+              <li><a href="{% url 'login' %}">{% trans 'Մուտք' %}</a></li>
+              <li><a href="{% url 'register' %}">{% trans 'Գրանցում' %}</a></li>
+              {% endif %}
+              <li><a href="#">{% trans 'Զամբյուղ' %}</a></li>
+              <li>
+                <a href="https://allexpress.am/wishlist/"
+                  >{% trans 'Ցանկությունների ցուցակ' %}</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col col-auto">
+        <div class="footer-item">
+          <h4>{% trans 'Հետևեք մեզ' %}</h4>
+          <div class="items-all">
+            <ul class="soc-icons flex-center-between">
+              <li>
+                <a href="#"
+                  ><img
+                    data-src="{% static 'img/icons/facebook.svg' %}"
+                    class="lozad"
+                    alt="facebook"
+                /></a>
+              </li>
+              <li>
+                <a href="#"
+                  ><img
+                    data-src="{% static 'img/icons/instagram.svg' %}"
+                    class="lozad"
+                    alt="instagram"
+                /></a>
+              </li>
+              <li>
+                <a href="#"
+                  ><img
+                    data-src="{% static 'img/icons/twitter.svg' %}"
+                    class="lozad"
+                    alt="twitter"
+                /></a>
+              </li>
+            </ul>
+            <p>{% trans "payment methods" %}</p>
+            <ul class="soc-icons flex-center-between">
+              <li>
+                <img
+                  data-src="{% static 'img/icons/master.svg' %}"
+                  class="lozad"
+                  alt="{% trans 'Վճարրում' %}"
+                />
+              </li>
+              <li>
+                <img
+                  data-src="{% static 'img/icons/visa.svg' %}"
+                  class="lozad"
+                  alt="{% trans 'Վճարրում' %}"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bot text-center">
+    <div class="logo-create">
+      <img
+        data-src="{% static 'img/icons/footer-logo.svg' %}"
+        class="lozad"
+        alt="Allexpress.am"
+      />
+      <p>
+        © 2020 All Express Armenia<br />
+        Design and Development by: <a href="#">"GIOS LLC"</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<div class="message-container">
+  <div class="message success hidden" id="Messagebasket">
+    <p>{% trans 'Ընտրված ապրանքը զամբյուղում է' %}</p>
+  </div>
+</div>

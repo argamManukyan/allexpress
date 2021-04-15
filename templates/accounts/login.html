@@ -1,0 +1,180 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans "Մուտք" %} | Allexpress.am</title>
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+
+    <style>
+      input.error,
+      textarea.error {
+        border-color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
+
+    <!--Header end-->
+
+    <!-- Main content -->
+    <main id="content" role="main">
+      <!-- register page-->
+      <section class="user-in-allexpress">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="all-form-wrap">
+                <div class="all-forms-items">
+                  <ul class="form_tabs align-items-center">
+                    <li class="form_item">
+                      <a href="{% url 'login' %}" class="active"
+                        >{% trans 'Մուտք' %}</a>
+
+                    </li>
+                    <li class="form_item">
+                    
+                      <a href="{% url 'register' %}">Գրանցում</a>
+                    </li>
+                  </ul>
+                  <div class="only_form">
+                    {% if messages %} {% for message in messages %}
+                    
+                    <p class="forgot-info">
+                      <b style="{% if message.tags == 'error' %}color: red
+                      {% else %}color: green {% endif %}
+                      ">{{message}}</b>
+                    </p>
+                    {% endfor %} {% endif %}
+                    <form
+                      method="POST"
+                      id="register-form"
+                      novalidate="novalidate"
+                    >
+                      {% csrf_token %}
+                      <div class="allexpress-form-group">
+                        <input
+                          type="text"
+                          id="email"
+                          name="email"
+                          placeholder="{% trans 'Մուտքանուն' %} *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          placeholder="{% trans 'Գաղտնաբառ' %} *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+
+                      <div
+                        class="allexpress-form-group saved-sysytem flex-center-between clr"
+                      >
+                        <label class="checkbox-design">
+                          <input type="checkbox" name="remember_me" />
+                          <span class="checkbox-square"></span>{% trans 'Հիշե՞լ ինձ' %}
+                          
+                        </label>
+                 
+                        <a href="{% url 'password-reset' %}"
+                          ><img
+                            src="{% static 'img/icons/forgot.svg' %}"
+                            alt="{% trans 'Մոռացե՞լ եք գաղտնաբառը' %}"
+                          />{% trans 'Մոռացե՞լ եք գաղտնաբառը' %}</a
+                        >
+                     
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input
+                          type="submit"
+                          class="btn btn-primary"
+                          name="submit"
+                          value="{% trans 'Մուտք' %}"
+                        />
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- register page end -->
+    </main>
+    <!-- Main content end -->
+
+    {% include 'includes/footer.html' %} {% include 'includes/menu.html' %}
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+
+    <script>
+      $(function () {
+        $("#register-form").validate({
+          rules: {
+            username: {
+              required: true,
+            },
+            password: {
+              required: true,
+            },
+          },
+          messages: {
+            username: {
+              required:
+                "{% trans 'Մուտքանուն դաշտը պարտադիր է լրացման համար' %}",
+              username: "{% trans 'Մուտքագրեք Ձեր մուտքանունը' %}",
+            },
+            password: {
+              required:
+                "{% trans 'Գաղտնաբառ դաշտը պարտադիր է լրացման համար' %}",
+            },
+          },
+          submitHandler: function (form) {
+            form.submit();
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

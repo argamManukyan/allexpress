@@ -1,0 +1,253 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans 'Գրանցում' %} | Allexpress.am</title>
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+
+    <style>
+      input.error,
+      textarea.error {
+        border-color: red;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header -->
+    {% include 'includes/header.html' %}
+    <!-- Main content -->
+    <main id="content" role="main">
+      <!-- register page-->
+      <section class="user-in-allexpress">
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="all-form-wrap">
+                <div class="all-forms-items">
+                  <ul class="form_tabs align-items-center">
+                    <li class="form_item">
+                      <a href="{% url 'login' %}">{% trans 'Մուտք' %}</a>
+                    </li>
+                    <li class="form_item">
+                      <a href="{% url 'register' %}" class="active"
+                        >{% trans 'Գրանցում' %}</a>
+                      
+                    </li>
+                  </ul>
+
+                  <div class="only_form">
+                    {% if messages %} {% for message in messages %}
+                    <p class="forgot-info">
+                      <b style="color: red">{{message}}</b>
+                    </p>
+                    {% endfor %} {% endif %}
+                    <form
+                      id="register-form"
+                      method="POST"
+                      novalidate="novalidate"
+                    >
+                      {% csrf_token %}
+                      <div class="allexpress-form-group">
+                        <input
+                          type="text"
+                          name="name"
+                          maxlength="150"
+                          autofocus=""
+                          required=""
+                          id="id_name"
+                          placeholder="{% trans 'Անուն Ազգանուն' %} *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input
+                          type="email"
+                          name="email"
+                          maxlength="254"
+                          id="id_email"
+                          placeholder="Email *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group" id="phonenumber">
+                        <input
+                          type="text"
+                          name="phone"
+                          id="order-fld-2 phone"
+                          placeholder="+374 (__) __-__-__"
+                          pattern="+374([0-9]{2})[0-9]{2}-[0-9]{2}-[0-9]{2}"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input
+                          type="password"
+                          name="password1"
+                          autocomplete="new-password"
+                          required=""
+                          id="id_password1"
+                          placeholder="{% trans 'Գաղտնաբառ' %} *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input 
+                          
+                          type="password"
+                          name="password2"
+                          autocomplete="new-password"
+                          required=""
+                          id="id_password2"
+                          placeholder="{% trans 'Հաստատել գաղտնաբառը' %} *"
+                        />
+                        <span class="errorMessage"></span>
+                      </div>
+                      <div class="allexpress-form-group text-center">
+                        <label class="checkbox-design">
+                          <input
+                            type="checkbox"
+                            name=""
+                            id="registered"
+                            checked=""
+                          />
+                          <span class="checkbox-square"></span>{% trans 'Ես
+                          համաձայն եմ Allexpress-ի' %}
+                          <a
+                            href="https://allexpress.am/policy/"
+                            style="color: #52bdec; text-decoration: underline"
+                            target="_blank"
+                            >{% trans 'պայմաններին և գաղտնիության
+                            քաղաքականությանը:' %}</a
+                          >
+                        </label>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <p class="tips">
+                          {% blocktrans %} Հուշում. Ձեր տվյալները ավելի ապահով
+                          պահելու համար, խնդրում ենք օգտագործել բարդ
+                          գաղտնաբառեր, օգտագործելով՝ սիմվոլներ, թվեր, տառեր
+                          միաժամանակ: {% endblocktrans %}
+                        </p>
+                      </div>
+                      <div class="allexpress-form-group">
+                        <input
+                          type="submit"
+                          class="btn btn-primary"
+                          id="reg-dis"
+                          name="submit"
+                          value="{% trans 'Գրանցվել' %}"
+                        />
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- register page end -->
+    </main>
+    <!-- Main content end -->
+    {% include 'includes/footer.html' %} {% include 'includes/menu.html' %}
+
+    <!--Menu end -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+
+    <script>
+      /* Phone maska */
+      $("#phonenumber input").mask("+374 (99) 99 99 99");
+      /* Phone maska end */
+      $(function () {
+        $("#register-form").validate({
+          rules: {
+            name: "required",
+            email: {
+              required: true,
+              email: true,
+            },
+            password1: {
+              required: true,
+              minlength: 8,
+            },
+            password2: {
+              required: true,
+              minlength: 8,
+              equalTo: "#id_password1",
+            },
+            phone: {
+              required: true,
+            },
+          },
+          messages: {
+            name: "{% trans 'Անուն Ազգանուն դաշտը պարտադիր է լրացման համար' %}",
+            phone: "{% trans 'Հեռախոսահամար դաշտը պարտադիր է լրացման համար' %}",
+            email: {
+              required: "{% trans 'Էլ-փոստ դաշտը պարտադիր է լրացման համար' %}",
+              email: "{% trans 'Մուտքագրեք ձեր էլ. Փոստի հասցեն' %}",
+            },
+            password1: {
+              required:
+                "{% trans 'Գաղտնաբառ դաշտը պարտադիր է լրացման համար' %}",
+              minlength:
+                "{% trans 'Գաղտնաբառը պետք է լինի 8 նիշ կամ ավելի երկար.' %}",
+            },
+            password2: {
+              required:
+                "{% trans 'Գաղտնաբառի հաստատում դաշտը պարտադիր է լրացման համար' %}",
+              minlength:
+                "{% trans 'Գաղտնաբառը պետք է լինի 8 նիշ կամ ավելի երկար' %}",
+              equalTo: "{% trans 'Գաղտնաբառը չի համապատասխանում' %}",
+            },
+            last_name: {
+              required:
+                "{% trans 'Հեռախոսահամար դաշտը պարտադիր է լրացման համար' %}",
+            },
+          },
+          submitHandler: function (form) {
+            form.submit();
+          },
+        });
+      });
+
+      $("#registered")
+        .change(function () {
+          $("#reg-dis").prop("disabled", !this.checked);
+        })
+        .change();
+    </script>
+  </body>
+</html>

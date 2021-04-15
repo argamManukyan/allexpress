@@ -1,0 +1,148 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NQFB9PR');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{{ q }} | Allexpress.am</title>
+    <meta name="Description" content="">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    {% include 'includes/header.html' %}
+
+    <!-- Main content -->
+    <main id="content" role="main">
+        <!-- cats banners -->
+        <section id="shop-page-content" class="search-page">
+            <div class="cnt">
+                <!-- search result yes -->
+                <div class="row">
+                    <div class="col col-4">
+                        <div class="shop-categories-one">
+                            <div id="op-time" class="block-title align-items-center">
+                                <img src=" {% static 'img/icons/bar.svg' %}" alt="">{% trans 'Բաժիններ' %}
+							
+                                <img src="{% static 'img/icons/shop-cat-down.svg' %}" class="all-cat-down"
+                                    alt="{% trans 'Տեսնել բաժինները' %}">
+                            </div>
+                            <nav class="block-content">
+                                <ul>
+                                    {% for sub_cat in subcategories %}
+                                    <li class="sub-menu">
+
+                                        <a href="{{ sub_cat.get_absolute_url }}">
+                                            <img src="{{ sub_cat.icon.url }}" alt="">
+                                            <span>{{ sub_cat }}</span>
+                                        </a>
+
+                                        <ul>
+                                            {% for pod in sub_cat.podcategory_set.all %}
+                                            <li><a href="{{ pod.get_absolute_url }}"><span>{{ pod }}</span></a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </nav>
+                        </div>
+                        <!--Filter-->
+
+                        <!--Filter end -->
+
+                    </div>
+                    <div class="col col-9">
+                        <div class="shop-title-h1">
+                            <h1><span>{% trans 'Որոնում' %}</span></h1>
+                        </div>
+                        <div id="breadcrumb">
+                            <ul class="breadcrumbs-list">
+                                <li class="b-list-item">
+                                    <a href="{% url 'home' %}" class="b-list-link">{% trans 'Գլխավոր' %}</a>
+                                    <img src="{% static 'img/icons/b-l.svg' %}" alt="Bredcrumbs icon">
+                                </li>
+                                <li class="b-list-item">
+                                    <meta itemprop="position" content="1">
+                                    <span itemprop="name">{{ q }}</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- search result no -->
+                        {% if products.count == 0 %}
+                        <div class="empty-search text-center">
+                            <i class="noSearch_empty "></i>
+                            <p>{% trans 'Մենք չկարողացանք գտնել' %} <b>{{ q }}</b> {% trans 'բառի որոնմանը համապատասխանող որևէ բան:' %}</p>
+                            <p> {% trans 'Փորձեք կրկին կամ վերադարձեք' %} <a href="{% url 'catalog' %}">
+                                    <b style="color: #52bdec;"> {% trans 'Խանութ' %}</b></a>
+                            </p>
+                        </div>
+                        {% endif %}
+                        <!-- search result no no-->
+
+                        <!-- search result yes -->
+                        <div class="full-search">
+                            {% if products.count > 0 %}
+                            {% include 'includes/view-mode.html' %}
+                            {% endif %}
+                            <div id="products-cont">
+                                <div class="row full-ban">
+                                    {% for product in page_product %}
+
+                                    <div class="col col-3">
+                                        {% include 'includes/product.html' %}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% if page_product.count > 12 %}
+                                {% include 'includes/pagination.html' %}
+                            {% endif %}
+                            <!-- search result yes end -->
+
+                        </div>
+                    </div>
+                </div>
+        </section>
+        <!-- cats banners end -->
+
+    </main>
+    <!-- Main content end -->
+
+    <!-- Footer -->
+    {% include 'includes/footer.html' %}
+    {% include 'includes/menu.html' %}
+   
+    <!--Menu end -->
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'javascript/add-to-cart.js' %}"></script>
+    <script src="{% static 'javascript/wish.js' %}"></script>
+
+</body>
+
+</html>

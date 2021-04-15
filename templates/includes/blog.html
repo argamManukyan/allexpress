@@ -1,0 +1,36 @@
+{% load static i18n %}
+<div class="col col-2">
+  <div class="home-blog">
+    <div class="blog-image">
+      <img src="{{post.image.url}}" alt="{{post.title}}" />
+      <img
+        src="{% static 'img/icons/default-icon.png' %}"
+       
+        class="blog-def"
+      />
+      <div class="list-views">
+        <img
+          src="{% static 'img/icons/views.svg' %}"
+    
+          class="view-icon"
+        />
+        <span>{{ post.views_count }}</span>
+      </div>
+    </div>
+    <div class="blog-desc">
+      <h3>
+        <a href="{{ post.get_absolute_url }}">{{ post.title|capfirst }}</a>
+      </h3>
+      <div class="date-news align-items-center">
+        <img src="{% static 'img/icons/calendar.svg' %}" alt="" />
+        <b>{{post.created|date:'d-m-Y H:i'}}</b>
+      </div>
+      <div class="blog-desc-but flex-center-between">
+        <p>{{ post.short_description|safe }}</p>
+        <a href="{{ post.get_absolute_url }}" class="button normal dark"
+          >{% trans 'Մանրամասն' %}</a
+        >
+      </div>
+    </div>
+  </div>
+</div>

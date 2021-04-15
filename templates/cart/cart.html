@@ -1,0 +1,464 @@
+{% load static %}{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-NQFB9PR');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% trans 'Ձեր Զամբյուղը' %} | Allexpress.am</title>
+    <meta name="Description" content="">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+    <style>
+        .head-icons .mobile_menu {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include 'includes/header.html' %}
+
+    <!-- Main content -->
+    <main id="content" role="main">
+        <!-- cart page-->
+        <section class="cart-page">
+            <div id="breadcrumb" class="other-bread">
+                <ul class="breadcrumbs-list">
+                    <li class="b-list-item">
+                        <a href="{% url 'home' %}" class="b-list-link">{% trans 'Գլխավոր' %}</a>
+                        <img src="{% static 'img/icons/b-l-white.svg' %}" alt="Bredcrumbs icon">
+                    </li>
+                    <li class="b-list-item">
+                        <meta itemprop="position" content="1">
+                        <span itemprop="name">{% trans 'Զամբյուղ' %}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="cnt">
+                <div class="row">
+                    <div class="col">
+                        <div class="shop-title-h1">
+                            <h1><span>{% trans 'Ձեր զամբյուղը' %}</span></h1>
+                        </div>
+                    </div>
+                </div>
+                {% if cart.items.count == 0 %}
+                <!-- Cart is empty -->
+                <div class="in-cart-no-items">
+                    <div class="row">
+                        <div class="col text-center">
+                            <div class="empt-c">
+                                <h3>{% trans 'ՁԵՐ ԶԱՄԲՅՈՒՂԸ ԴԱՏԱՐԿ Է' %}</h3>
+                                <div class="conts-or-check">
+                                    <a href="{% url 'catalog' %}" class="">← {% trans 'Շարունակել գնումները' %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cart is empty end -->
+                {% else %}
+                <!-- Cart is full -->
+                <div class="full-cart-items">
+                    <!-- table products -->
+                    <div class="row">
+                        <div class="col">
+                            <div id="order-table">
+                                <div class="conts-or-check">
+                                    <a href="{% url 'catalog' %}" class="">← {% trans 'Շարունակել գնումները' %}</a>
+                                </div>
+                                <table id="cartTableALL">
+                                    <thead>
+                                        <tr class="order-head">
+                                            <th class="order-item-nom" width="1%">№</th>
+                                            <th class="order-head-img">{% trans 'Նկար' %}</th>
+                                            <th class="order-head-name">{% trans 'Անվանում' %}</th>
+                                            <th class="order-head-price" width="1%">{% trans 'Արժեք' %}</th>
+                                            <th class="order-head-cnt nowrap" width="1%">{% trans 'Քանակ' %}</th>
+                                            <th class="order-head-sum" width="1%">{% trans 'Գին' %}</th>
+                                            <th class="order-head-del" width="1%">{% trans 'Հեռացնել' %}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in cart.items.all %}
+                                        <tr id="order-item-{{ item.id }}" class="order-item ">
+                                            <td class="order-item-nom"><b>{{ forloop.counter }}</b></td>
+                                            <td class="order-item-img" align="center" width="1%">
+
+                                                <img src="{{ item.product.productvariantimages_set.first.image.url }}">
+
+                                            </td>
+                                            <td class="order-item-name">
+                                                <a href="{{item.product.product.get_absolute_url}}">{{ item.product.product.name }}</a>
+                                            </td>
+                                            <td class="order-item-price nowrap">{{ item.product.get_prices }}
+                                                <span>֏</span>
+                                            </td>
+                                            <td class="order-item-cnt">
+                                                <form action="" method="POST" class="order-qty-mn">
+                                                    
+                                                    <div class="prod-qty">
+                                                        <div class="number flex-content-center">
+                                                            <img src="{% static 'img/icons/minus.svg' %}" class="minus"
+                                                                alt="{% trans 'Նվազեցնել' %}">
+                                                            <input type="text" id="quantity-{{ item.id }}"
+                                                                data-id="{{ item.id }}" class="qtycart"
+                                                                onchange="changeQty({{item.id}})"
+                                                                min="1"
+                                                                value="{{ item.qty }}" disabled>
+                                                            <img src="{% static 'img/icons/plus.svg' %}" class="plus"
+                                                                alt="{% trans 'Ավելացնել' %}">
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            <td class="order-item-sum nowrap">
+                                                <span
+                                                    id="cart-item-total-{{ item.id }}">{{ item.item_total}}
+                                                </span>
+                                                <span>֏</span>
+                                            </td>
+
+                                            <td class="order-item-del" align="center">
+                                                <button type="button" onclick="removeFromBasket({{item.id}})"
+                                                    class="delete-product-item remove_from_cart"
+                                                    data-id="{{item.id}}">                                                    
+                                                    <img src="{% static 'img/icons/bin.svg' %}"
+                                                        alt="{% trans 'Հեռացնել զամբյուղից' %}" title="{% trans 'Հեռացնել զամբյուղից' %}">
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="order-total-line">
+                                <div class="total-price-all flex-center-between">
+                                    <table class="cart-summ">
+                                        <tbody>
+                                            <tr class="cart-summ-subtotal">
+                                                <td class="cart-summ-label">{% trans 'Գին' %}:</td>
+                                                <td class="cart-summ-value"><span id="cart-total-price">{{cart.cart_total }}
+                                                    </span> <span>֏</span>
+                                                </td>
+                                            </tr>
+                                            <tr class="cart-summ-shipping">
+                                                <td class="cart-summ-label">
+                                                    <span class="text-nowrap">{% trans 'Առաքում' %}:</span>
+                                                </td>
+                                                <td class="cart-summ-value"><span id="araqman_vjar"
+                                                        class="cart-summ-araqum"></span><span>֏</span>
+                                                </td>
+                                            </tr>
+
+                                            <tr class="cart-summ-total">
+                                                <td class="cart-summ-label"><b>{% trans 'Ընդհանուր' %}:</b></td>
+                                                <td class="cart-summ-value">
+                                                    <b>
+                                                        <span id="FinalSum" class="final-sum"></span>
+                                                        <span>֏</span>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-2">
+                            <div class="del-list-pay">
+                                <h3 class="order-page-title"><span>{% trans 'Վճարման եղանակ' %}</span></h3>
+                                <table id="payments-list" class="methods-list">
+                                    <tbody>
+                                    {% for payment in payment_types %}
+                                        <tr align="top" id="payment-block-{{forloop.counter}}">
+                                            <th>
+                                                <input 
+                                                type="radio" 
+                                                id="pay-type-{{forloop.counter}}" 
+                                                class="payment-item" 
+                                                name="payment" 
+                                                value="{{payment.id}}">
+                                            </th>
+                                            <td>
+                                                <label class="label" for="pay-type-{{forloop.counter}}"><b>{{payment.name}}</b></label>
+                                                <div class="delivery-description">
+                                                    {% if payment.paymenttypeicons_set.count %}
+
+                                                    <ul class="soc-icons align-items-center">
+                                                        {% for img in payment.paymenttypeicons_set.all %}
+                                                        <li>
+                                                            <img src="{{img.icon.url}}"
+                                                                alt="{% trans 'Վճարման եղանակ' %}"
+                                                                {% if payment.id == 3 %}
+                                                                    style="width:100px"
+                                                                {% else %}
+                                                                    style="width:45px;margin-right: 10px;"
+                                                                {% endif %}
+                                                                >
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                    {% endif %}
+                                                    <p>{{payment.description}}</p>
+                                                </div>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col col-2">
+                            <div class="del-list-pay">
+                                <h3 class="order-page-title"><span>{% trans 'Առաքման տվյալներ' %}</span></h3>
+                                
+                                <form id="checkout-form" action="" method="POST" class="hidden-method">{% csrf_token %}
+                                    <h4 class="text-center">{% trans 'Պատվերի Ձեւակերպում' %}</h4>
+                                    <div  class="inputs-groups">
+                                        <span class="label">{% trans 'Անուն Ազգանուն' %} *:</span>
+                                        <input type="text" name="name" maxlength="150" required="" id="id_name">
+                                    </div>
+                                    <div class="inputs-groups">
+                                        <span class="label">{% trans 'Հեռախոսահամար' %} *:</span>
+                                        <input type="text" name="phone" maxlength="150" required="" id="id_phone">
+                                    </div>
+
+                                    <div class="two-inputs flex-center-between variant-2">
+                                        <div class="inputs-groups">
+                                            <span class="label">{% trans 'Մարզ' %} * :</span>
+                                            <select id="City" class="js-select2" name="state_name">
+                                                <!--<option value="">{% trans 'Մարզ' %}</option>-->
+                                                {% for state in states %}
+                                                <option data-id="{{state.id}}" value="{{state.id}}">{{state.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="inputs-groups">
+                                            <span class="label">{% trans 'Բնակավայր' %} * :</span>
+                                            <select id="Region" class="js-select2" name="city_name">
+                                                <option value="">{% trans 'Բնակավայր' %}</option>
+                                                {% for city in cities %}
+                                                    <option data-price="{{city.price}}" value="{{city.id}}">{{city.name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="inputs-groups mb variant-2">
+                                        <span class="label">{% trans 'Հասցե' %} * :</span>
+                                        <textarea name="address" cols="20" rows="2" id="id_address"></textarea>
+                                    </div>
+
+                                    <div class="inputs-groups">
+                                        <span class="label">{% trans 'Նշումներ' %}:</span>
+                                        <textarea name="comment" cols="20" rows="5" id="id_comment"></textarea>
+                                    </div>
+                                    <div class="inputs-groups bort-bot flex-center-between">
+                                        <span class="order-total-span">{% trans 'Վճարման ենթակա գումար' %}:</span>
+                                        <span class="osum order_topay_curr">
+                                            <span id='finally'>{{ cart.cart_total }}</span>
+                                            <span>֏</span>
+                                        </span>
+                                    </div>
+                                    <div class="inputs-groups">
+                                        <input type="submit" id="order-button" value="{% trans 'Ձևակերպել պատվերը' %}" class="button big light">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- table products end -->
+                </div>
+                <!-- Cart is full end -->
+                {% endif %}
+            </div>
+        </section>
+        <!-- cart page end -->
+    </main>
+    <!-- Main content end -->
+   
+    {% include 'includes/footer.html' %}
+    {% include 'includes/menu.html' %}
+
+    <!--Modal end -->
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+    
+
+    <!-- <script src="{% static 'js/map.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
+    <script>
+        $(".js-select2").select2();
+        $('#id_user').fadeOut();
+        $('#id_stripe_type').fadeOut();
+        $('#cart-is-empty').fadeOut();
+
+        /* Phone maska */
+        $("#id_phone").mask("+374 (99) 99 99 99");
+        /* Phone maska end */
+
+        /* Validate */
+        $(function () {
+            $('#checkout-form').validate({
+                rules: {
+                    name: "required",
+                    phone: {
+                        required: true,
+                    },
+                    address: {
+                        required: true,
+                    }
+                },
+                messages: {
+                    name: "{% trans 'Անուն Ազգանուն դաշտը պարտադիր է լրացման համար' %}",
+                    phone: {
+                        required: "{% trans 'Հեռախոսահամար դաշտը պարտադիր է լրացման համար' %}"
+                    },
+                    address: {
+                        required: "{% trans 'Առաքման հասցե դաշտը պարտադիր է լրացման համար' %}"
+                    }
+                },
+                submitHandler: function (form) {
+                    form.submit();
+                }
+            });
+        });
+        /* Validate end */
+
+        
+
+        $('.methods-list').change(function () {
+            var input_radio = $('input[name="payment"]:checked').val();
+            var field_selcted = document.getElementById('id_stripe_type');
+
+            var selected_element_stripe = $('#id_stripe_type option:selected');
+            if (input_radio === selected_element_stripe) {
+                console.log('nuynnen')
+            } else {
+                selected_element_stripe.val(input_radio);
+                $('.payment-my-variant').val(input_radio);
+                $('#id_stripe_type').val(input_radio)
+            }
+
+        })
+
+
+        // var adresserror = $('#id_address').attr('value');
+        // if (adresserror.length > 0) {
+        //     $('.errorlists').css({ 'display': 'none' });
+        // }
+        // else {
+        //     $('.errorlists').css({ 'display': 'block' });
+        // }
+
+    </script>
+
+    <script>
+
+        $('#City').on('change',function(){
+        $.ajax({
+            method:'GET',
+            data:{id:$(this).find(":selected")[0].attributes['data-id'].value},
+            url:`{{request.get_raw_uri}}`,
+            headers:{
+                'X-Requested-With':'XMLHttpRequest'
+            },
+            success:function(data){
+                console.log(data);
+                if(data){
+                   const cartTotPrice = document.querySelector('#cart-total-price').textContent
+                   $('#araqman_vjar').html(data[0].price)
+                   $('#id_araqum').val(parseInt((data[0].price)))
+                   $('#FinalSum').html(data[0].price + +cartTotPrice)
+                   $('#id_all_total_price').val(data[0].price + +cartTotPrice)
+                   $('#finally').html(data[0].price + +cartTotPrice)
+                   $('#Region').html('')
+                for (let i = 0; i< data.length; i ++){
+                    $('#Region').append(`<option data-price="${data[i].price}" value="${data[i].name}">${data[i].name}</option>`)
+                }}
+            },
+          
+            
+        })
+    })
+    
+        $('#Region').on('change',function(){
+            const current_price = $(this).find(":selected")[0].attributes['data-price'].value
+            const cart_all_price = document.getElementById('cart-total-price').innerText
+            console.log(cart_all_price)
+            // for (let i=0; i <= current_price.length;i++){
+                $('#araqman_vjar').html(current_price)
+                $('#id_araqum').val(parseInt(current_price))
+                $('#id_all_total_price').val((parseInt(cart_all_price) + parseInt(current_price)))
+                $('#FinalSum').html((parseInt(cart_all_price) + parseInt(current_price)))
+                $('#finally').html(parseInt(cart_all_price) + parseInt(current_price))
+            // }
+            // console.log($(this).attr('data-price'))
+        })
+
+        function changeQty(id){
+            const qty = document.getElementById(`quantity-${id}`).value
+            const body = JSON.stringify({qty:qty,productId:id})
+            fetch(`${window.location.origin + '/change-qty/'}`,{
+                method:'POST',
+                headers:{
+                    'X-Requested-With':'XMLHttpRequest'
+                },
+                body:body
+            }).then(res => res.json())
+            .then(data => {
+                const delPrice = document.getElementById('araqman_vjar').innerText || 0
+                document.getElementById('cart-item-total-'+id).innerText = data.item_total_price 
+                document.getElementById('cart-total-price').innerText = data.cart_total_price 
+                document.getElementById('FinalSum').innerText = parseInt(data.cart_total_price) + parseInt(delPrice) 
+                document.getElementById('finally').innerText = parseInt(data.cart_total_price) + parseInt(delPrice) 
+            })
+        }
+        
+        function removeFromBasket(id){
+            fetch(`${window.location.origin + '/remove_from_basket/'}`,{
+                method:'POST',
+                headers:{
+                    'X-Requested-With':'XMLHttpRequest'
+                },
+                body:JSON.stringify({item:id})
+            }).then(res => res.json())
+            .then(data => {
+                const delPrice =  document.getElementById('araqman_vjar').innerText || 0
+                data.cart_total_price === 0 ?
+                    window.location.reload():
+                document.getElementById('order-item-'+id).remove() 
+                document.getElementById('cart-total-price').innerText = data.cart_total_price 
+                document.getElementById('FinalSum').innerText = parseInt(data.cart_total_price) + parseInt(delPrice) 
+                document.getElementById('finally').innerText = parseInt(data.cart_total_price) + parseInt(delPrice) 
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>

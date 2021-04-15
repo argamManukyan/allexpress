@@ -1,0 +1,93 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>{% trans 'Մեր Մասին' %} | ALLexpress.am</title>
+    <meta name="Description" content="" />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+  </head>
+
+  <body>
+    <!-- Header -->
+
+    {% include 'includes/header.html' %}
+
+    <main id="content" role="main">
+      <!-- Blog page-->
+      <section class="blog-page">
+        <div id="breadcrumb" class="other-bread">
+          <ul class="breadcrumbs-list">
+            <li class="b-list-item">
+              <a href="{% url 'home' %}" class="b-list-link"
+                >{% trans 'Գլխավոր' %}</a
+              >
+              <img
+                src="{% static 'img/icons/b-l-white.svg' %}"
+                alt="Bredcrumbs icon"
+              />
+            </li>
+            <li class="b-list-item">
+              <meta itemprop="position" content="1" />
+              <span itemprop="name">{% trans 'Մեր մասին' %}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="shop-title-h1">
+                <h1 class="text-center">
+                  <span>{% trans 'Մեր Մասին' %}</span>
+                </h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="text-allexpress">
+                    {{ about.content|safe }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Blog page end -->
+    </main>
+    <!-- Main content end -->
+  {% include 'includes/footer.html' %} 
+  {% include 'includes/menu.html' %}
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

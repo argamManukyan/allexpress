@@ -1,0 +1,153 @@
+{% load static %} {% load i18n %}
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+    </script>
+    <!-- End Google Tag Manager -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>
+      {% if blog.meta_title|length > 0 %}
+      {{ blog.meta_title }}
+      {% else %}
+      {{blog.title|title}} | Allexpress.am
+      {% endif %}
+    </title>
+    <meta
+      name="Description"
+      content="{% if blog.meta_description is not None  %}
+        {{ blog.meta_description }}{% endif %}"
+    />
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
+    ></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+  </head>
+
+  <body>
+    <!-- Header -->
+ {% include 'includes/header.html' %}
+   <!-- Main content -->
+    <main id="content" role="main">
+      <!-- Blog full page-->
+      <section class="full-blog-page">
+        <div id="breadcrumb" class="other-bread">
+          <ul class="breadcrumbs-list">
+            <li class="b-list-item">
+              <a href="{% url 'home' %}" class="b-list-link">{% trans 'Գլխավոր' %}</a>
+              <img
+                src="{% static 'img/icons/b-l-white.svg' %}"
+                alt="Bredcrumbs icon"
+              />
+            </li>
+            <li class="b-list-item">
+              <meta itemprop="position" content="1" />
+              <a href="{% url 'blog' %}" class="b-list-link">
+                <span itemprop="name">{% trans 'Բլոգ' %}</span>
+              </a>
+              <img
+                src="{% static 'img/icons/b-l-white.svg' %}"
+                alt="Bredcrumbs icon"
+              />
+            </li>
+            <li class="b-list-item">
+              <meta itemprop="position" content="2" />
+              <span itemprop="name">{{blog.title|capfirst}}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="cnt">
+          <div class="row">
+            <div class="col">
+              <div class="shop-title-h1">
+                <h1><span>{{blog.title|capfirst}}</span></h1>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="home-blog full-blog-page">
+                <div class="blog-image">
+                  <img
+                    src="{{blog.image.url}}"
+                    class="img-responsive full-img"
+                    alt="blog"
+                  />
+                  <img
+                    src="{% static 'img/icons/default-icon.png' %}"
+                    alt=""
+                    class="blog-def"
+                  />
+                </div>
+                <div class="full-blog-desc">
+                  <div class="post-details">
+                    <div class="details-open">
+                      <img
+                        src="{% static 'img/icons/views-black.svg' %}"
+                        alt="{% trans 'դիտումների քանակ' %}"
+                      />
+                      <span>{{blog.views_count}}</span>
+                    </div>
+                    <i>/</i>
+                    <div class="details-open">
+                      <img
+                        src="{% static 'img/icons/calendar.svg' %}"
+                        alt="{% trans 'Ամսաթիվ' %}"
+                      />
+                      <span>{{blog.created|date:'d-m-Y H:i'}}</span>
+                    </div>
+                    <i>/</i>
+                    <div class="details-open">
+                      <img
+                        src="{% static 'img/icons/customer.svg' %}"
+                        alt="{% trans 'Ավելացնող' %}"
+                      />
+                      <span>Allexpress</span>
+                    </div>
+                  </div>
+                    {{ blog.content|safe }}
+                </div>
+                <div class="full-blog-details"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Blog full page end -->
+    </main>
+    <!-- Main content end -->
+
+    <!-- Footer -->
+
+    {% include 'includes/footer.html' %}
+     {% include 'includes/menu.html' %}
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{% load i18n static %}
+
+<div class="col col-4">
+  <div class="banner-all grad-block">
+    <div class="banner-text">
+      <p>{{category.name|safe}}</p>
+      <a href="{{ category.get_absolute_url }}"
+        >{% trans "Տեսնել բոլորը" %}
+        <img src="{% static 'img/icons/banner-right.svg' %}" />
+     </a>
+    </div>
+    <div class="banner-img">
+      <img src="{{category.icon.url}}" alt="allexpress" />
+    </div>
+  </div>
+</div>

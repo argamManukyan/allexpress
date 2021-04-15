@@ -1,0 +1,117 @@
+{% load static %}{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+<head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NQFB9PR');</script>
+<!-- End Google Tag Manager -->
+    <meta charset='utf-8'/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>{% trans 'Ցանկությունների ցուցակ' %} | Allexpress.am</title>
+    <meta name="Description" content="">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+
+</head>
+
+<body>
+
+
+{% include 'includes/header.html' %}
+<!-- Main content -->
+<main id="content" role="main">
+    <!-- cats banners -->
+    <section id="wish-list-content">
+        <div id="breadcrumb" class="other-bread">
+            <ul class="breadcrumbs-list">
+                <li class="b-list-item">
+                    <a href="{% url 'home' %}" class="b-list-link">{% trans 'Գլխավոր' %}</a>
+                    <img src="{% static 'img/icons/b-l-white.svg' %}" alt="Bredcrumbs icon">
+                </li>
+                <li class="b-list-item">
+                    <meta content="1">
+                    <span>{% trans 'Ցանկությունների ցուցակ' %}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="cnt">
+            <div class="row">
+                <div class="col">
+                    <div class="shop-title-h1">
+                        <h1><span>{% trans 'Ցանկությունների ցուցակ' %}</span></h1>
+                    </div>
+                 </div>
+			</div>   
+              <div class="row">
+                  {% if wishlist.items.count ==  0 %} 
+                  <!-- Wish list is empty -->
+                   <div id="EmptyWishList" class="col text-center">
+                            <div class="empt-c">
+                                <h3>{% trans 'Հավանումների ցանկը դատարկ է:' %}</h3>
+                                <div class="conts-or-check">
+                                    <a href="{% url 'catalog' %}" class="">← {% trans 'Վերադառնալ խանութ' %}</a>
+                                </div>
+                            </div>
+                     </div>
+                  <!-- Wish list is empty end -->
+                    {% else %}
+                   <!-- Wish list is full -->
+                   <div id="FullWish" class="col">
+                    <div id="products-cont">
+                       <div class="products-settings">
+                        <div class="products-view-mode align-items-center">
+				          {% include 'includes/view-mode.html' %}
+                        </div>
+                    </div>
+                        <div class="row full-ban">
+                            {% for wish_item in wishlist.items.all %}
+                                {% with wish_item.product.product as product %}
+                                    <div class="col col-4" id="item_close-{{ product.slug }}">
+                                        {% include 'includes/product.html' %}
+                                    </div>
+                                {% endwith %} 
+                            {% endfor %}
+                        </div>
+                    </div>
+                    </div>
+                   <!-- Wish list is full end -->
+                   {% endif %}
+              </div>
+           
+        </div>
+    </section>
+    <!-- cats banners end -->
+
+</main>
+<!-- Main content end -->
+
+<!-- Footer -->
+
+{% include 'includes/footer.html' %}
+{% include 'includes/menu.html' %}
+
+<!--Menu end -->
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'javascript/wish.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script>
+    if (!!window.performance && window.performance.navigation.type === 2) {
+            console.log('Reloading');
+            document.location.reload();
+    }
+</script>
+
+</body>
+
+</html>

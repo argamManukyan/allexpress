@@ -1,0 +1,383 @@
+{% load static %}
+{% load i18n %}
+{% load mptt_tags %}
+
+<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+
+<head>
+  <!-- Google Tag Manager -->
+  <script>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || [];
+      w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+      var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s),
+        dl = l != "dataLayer" ? "&l=" + l : "";
+      j.async = true;
+      j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, "script", "dataLayer", "GTM-NQFB9PR");
+  </script>
+  <!-- End Google Tag Manager -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    {% if product.meta_title|length > 1 %}
+      {{ product.meta_title }}
+    {% else %}{{product.name|capfirst}}
+    {% endif %}
+  </title>
+  <meta name="Description" content="{% if product.meta_description is not None  %}
+        {{ product.meta_description }}
+      {% endif %}" />
+  <link rel="shortcut icon" href="/static/img/favicon.ico" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/color.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/ex.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/swiper.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.1/jquery.fancybox.min.css" />
+</head>
+
+<body>
+  <!-- Header -->
+  {% include 'includes/header.html' %}
+
+
+  <!-- Main content -->
+  <main id="content" role="main">
+    <!-- Product page -->
+    <section class="product-page">
+      <div class="cnt">
+        <div class="row">
+          <div class="col col-prod-5">
+            <div class="all-full-pictures">
+              <div class="swiper-container gallery-top">
+                <div class="swiper-wrapper">
+                  {% for image in images %}
+                  {% if forloop.first %}
+                  <div class="swiper-slide">
+                    <a data-fancybox="images" href="{{ image.image.url }}">
+                      <img id="img" src="{{ image.image.url }}" class="" alt="" />
+                    </a>
+                  </div>
+                  {% else %}
+                  <div class="swiper-slide">
+                    <a data-fancybox="images" href="{{ image.image.url }}">
+                      <img src="{{ image.image.url }}" class="" alt="" />
+                    </a>
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                <!-- Add Arrows -->
+                <div class="swiper-button-next swiper-button-black"></div>
+                <div class="swiper-button-prev swiper-button-black"></div>
+              </div>
+
+              <div class="swiper-container gallery-thumbs">
+                <div class="swiper-wrapper">
+                  {% for img in images %}
+                  {% if forloop.first %}
+                  <div class="swiper-slide">
+                    <img id="img" src="http://localhost:8000{{ img.image.url }}" alt="" />
+                  </div>
+                  {% else %}
+                  <div class="swiper-slide">
+                    <img src="http://localhost:8000{{ img.image.url }}" class="" alt="" />
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col col-prod-7">
+            <div id="breadcrumb">
+              <ul class="breadcrumbs-list">
+                <li class="b-list-item">
+                  <a href="{% url 'home' %}" class="b-list-link">{% trans "Գլխավոր" %}</a>
+                  <img src="{% static 'img/icons/b-l.svg' %}" alt="Bredcrumbs icon" />
+                </li>
+                {% for cat in categories %}
+                <li class="b-list-item" itemprop="itemListElement" itemscope="" itemtype="">
+                  <meta itemprop="position" content="1" />
+                  <a href="{{cat.get_absolute_url}}" class="b-list-link">
+                    <span itemprop="name">{{cat.name}}</span>
+                  </a>
+                  <img src="{% static 'img/icons/b-l.svg' %}" alt="Bredcrumbs icon" />
+                </li>
+                {% endfor %}
+                <li class="b-list-item">
+                  <meta itemprop="position" content="4" />
+                  <span itemprop="name">{{product.name}}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="add-name-price b-bot">
+              <h1>{{ product.name }}</h1>
+              <div class="add-name-price b-mar align-items-center">
+                <div class="prod-price">
+                  {% if product_productvariants_set_first.sale > 0 %}
+                  <span class="old-price">
+                    <b>{{ product_productvariants_set_first.price }} <span>AMD</span></b>
+                  </span>
+
+                  <span class="new-price">
+                    <b>{{ product_productvariants_set_first.sale }} <span>AMD</span></b>
+                  </span>
+                  {% else %}
+
+                  <span class="new-price">
+                    <b>{{ product_productvariants_set_first.price }} <span>AMD</span></b>
+                  </span>
+                  {% endif %}
+                </div>
+                <!-- Wish list-->
+                <div class="wish-add">
+
+                  <img src="{% static 'img/icons/wish-add.svg' %}" id="adding-{{ product.slug }}"
+                    class="w-add wishlist-add wishhing-{{product.slug}}" data-slug="{{ product.slug }}" alt="" />
+
+                </div>
+                <!-- Wish list end -->
+              </div>
+              <!-- qty + select -->
+
+              <div class="add-name-price" id="addToVue">
+                <div class="prod-add align-items-center">
+                  <div class="prod-qty">
+                    <div class="number flex-content-center">
+                      <img src="{% static 'img/icons/minus.svg' %}" class="minus" alt="" />
+                      <input type="text" value="1" class="quantity" id="qty-{{product_productvariants_set_first.id}}"
+                        name="qty" />
+                      <img src="{% static 'img/icons/plus.svg' %}" class="plus" alt="" />
+                    </div>
+                  </div>
+                  <div class="prod-butt">
+
+                    <button type="button"
+                            data-id="{{product_productvariants_set_first.id}}"
+                      class="add-cart flex-content-center submit_btn">
+                      <img src="{% static 'img/icons/prod-but.svg' %}" alt="" />{% trans "Ավելացնել" %}
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- qty + select end -->
+            </div>
+
+            <div class="prod-only-dets">
+             {% comment %} <ul class="shop-options">
+                {% if product.color != "" %}
+                <li>
+                  <span class="opt">Գույն:</span>
+                  <span class="val" id="color-select">{{product.color|capfirst}}</span>
+                </li>
+                {% endif %} {% if product.tesak != "" %}
+                <li>
+                  <span class="opt">Տեսակ:</span>
+                  <span class="val">{{product.tesak|capfirst}}</span>
+                </li>
+                {% endif %} {% if product.qash != "" %} {% if product.qashChm
+                is not None %}
+                <li>
+                  <span class="opt">Քաշ:</span>
+                  <span class="val">{{product.qash}} {{product.qashChm}}</span>
+                </li>
+                {% else %}
+                <li>
+                  <span class="opt">Քաշ:</span>
+                  <span class="val">{{product.qash}}</span>
+                </li>
+                {% endif %} {% endif %} {% if product.erkarutyun != "" %} {%
+                if product.erkarCHm is not None %}
+                <li>
+                  <span class="opt">Չափս:</span>
+                  <span class="val">{{product.erkarutyun}} {{product.erkarCHm.name}}</span>
+                </li>
+                {% else %}
+                <li>
+                  <span class="opt">Չափս:</span>
+                  <span class="val">{{product.erkarutyun}}</span>
+                </li>
+                {% endif %} {% endif %} {% if product.hzorutyun != "" %} {% if
+                product.hzorChm is not None %}
+                <li>
+                  <span class="opt">Հզորություն:</span>
+                  <span class="val">{{product.hzorutyun|capfirst}}
+                    {{product.hzorChm.name}}</span>
+                </li>
+                {% else %}
+                <li>
+                  <span class="opt">Հզորություն:</span>
+                  <span class="val">{{product.hzorutyun|capfirst}} </span>
+                </li>
+                {% endif %} {% endif %} {% if product.artadrox != "" %}
+                <li>
+                  <span class="opt">Արտադրող:</span>
+                  <span class="val">{{product.artadrox}}</span>
+                </li>
+                {% endif %} {% if product.qanaky_havaqacuum is not None %}
+                <li>
+                  <span class="opt">Քանակը հավաքածուում:</span>
+                  <span class="val">{{product.qanaky_havaqacuum}} հատ</span>
+                </li>
+                {% endif %} {% if product.tsaval != "" %} {% if product.tsavChm is not None %}
+
+                <li>
+                  <span class="opt">Ծավալ:</span>
+                  <span class="val">{{product.tsaval|capfirst}}
+                    {{product.tsavChm.name}}</span>
+                </li>
+                {% else %}
+                <li>
+                  <span class="opt">Ծավալ:</span>
+                  <span class="val">{{product.tsaval|capfirst}}</span>
+                </li>
+                {% endif %} {% endif %} {% if product.pod_category is not None %}
+
+                <li>
+                  <span class="opt">Բաժնի անվանում:</span>
+                  <span class="val">{{product.pod_category|capfirst}}</span>
+                </li>
+                {% else %}
+                <li>
+                  <span class="opt">Բաժնի անվանում:</span>
+                  <span class="val">{{product.sub_category|capfirst}}</span>
+                </li>
+                {% endif %} {% if product.artadrox_erkir != "" %}
+                <li>
+                  <span class="opt">Արտադրող երկիր:</span>
+                  <span class="val">{{product.artadrox_erkir}}</span>
+                </li>
+                {% endif %} {% if product.producti_kod != "" %}
+                <li>
+                  <span class="opt">Ապրանքի կոդ:</span>
+                  <span class="val" id="product-code">{{product.producti_kod}}</span>
+                </li>
+                {% endif %} 
+              
+              </ul>  {% endcomment %}
+              <div style="display:flex;">
+                <div style="flex-direction:column">
+                  {% for color in colors %}
+                  <div>
+                    <a class="margin-left:10px"
+                      href="{{product.get_absolute_url}}?color={{color.id}}">{{color.name}}</a>
+                  </div>
+                  {% endfor %}
+                </div>
+                <div style="margin-left:20px;">
+
+                  <select name="size" id="sizeProduct">
+                    {% for size in sizes %}
+                    <option value="{{size.size_en}}" 
+                    {% if size.size_en.split|join:'+' in request.get_full_path %}selected{% endif %}
+                      >{{size.size_ru|urlize}}
+
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              {% comment %} <div class="shop-options-variation">
+                <select name="size" id="size">
+                </select>
+                <div class="color-variation">
+                  <a href="">
+                    <span class="only-color-view"></span>
+                    <span class="only-color-name">name</span>
+                  </a>
+                </div>
+              </div> {% endcomment %}
+            </div>
+          </div>
+          <div class="col">
+            <div class="full-desc-payments">
+              <ul class="tabs flex-nowrap">
+                <li class="col-auto active" rel="tab1">
+                  <span>{% trans "Նկարագրություն" %}</span>
+                </li>
+                <li class="col-auto" rel="tab2">
+                  <span>{% trans "Առաքում և վճարում" %}</span>
+                </li>
+              </ul>
+
+              <div class="tab_container">
+                <!-- #tab1 -->
+                <div id="tab1" class="tab_content">
+                  <div class="prod-desc-large">
+                    {{product.description|safe}}
+                  </div>
+                </div>
+                <!-- #tab2 -->
+                <div id="tab2" class="tab_content" style="display: none">
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Product page end -->
+
+    <!--New Products-->
+    <section class="related-items">
+      <div class="cnt">
+        <div class="row">
+          <div class="col">
+            <div class="gcarousel">
+              <div class="goods-list">
+                <div class="swiper-container slider-4">
+                  <div class="slide-tit">
+                    <h3><span>Առաջարկվող ապրանքներ</span></h3>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                  </div>
+                  <div class="swiper-wrapper">
+                    {% for realted in thisProductCategory %}
+                    <div class="swiper-slide">
+                      {% include 'includes/product.html' %}
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--New Products end -->
+  </main>
+  <!-- Main content end -->
+
+  <!-- Footer -->
+  {% include 'includes/footer.html' %}
+  {% include 'includes/menu.html' %}
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  {% comment %}
+  <script src="{% static 'javascript/all.js' %}"></script> {% endcomment %}
+  {% comment %}
+  <script src="{% static 'javascript/wish.js' %}"></script> {% endcomment %}
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+  <script src="{% static 'js/script.js' %}"></script>
+  <script src="{% static 'js/swiper-express.js' %}"></script>
+  <script src="{% static 'js/swiper.min.js' %}"></script>
+  <script src="{% static 'js/plugs.js' %}"></script>
+  <script src="{% static 'javascript/changeVariants.js' %}"></script>
+  <script src="{% static 'javascript/add-to-cart.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js"></script>
+  <script>
+    if (!!window.performance && window.performance.navigation.type == 2) {
+      location.reload(true, 0);
+    }
+  </script>
+</body>
+
+</html>

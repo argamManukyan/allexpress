@@ -1,0 +1,97 @@
+::-webkit-scrollbar {width: 5px;}
+::-webkit-scrollbar:horizontal {height: 3px;}
+::-webkit-scrollbar-track {background: #d8d8d8;}
+
+::selection,::-moz-selection  {
+	background: #d8d8d8;
+    color: #fff;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.name-desc-price h2,.blog-desc h3 a:hover,
+footer ul li a:hover,
+footer ul li a:focus,
+.only-price,.valyuta,
+.ful-sub-cat li a:hover,
+.b-list-link:hover,
+.b-list-link span:hover {
+    color: #52bdec;
+}
+#shop-page-content .block-content li .cat-left{
+	border-color: #52bdec;
+}
+#go-top:hover,.block-title,.serach-header button,::selection,::-webkit-scrollbar-thumb,#breadcrumb.other-bread{
+	    background: #52bdec;
+}
+.grad-block,.blog-desc {
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFFAFF 100%);
+}
+.product-item .prod-butt button:hover,
+.add-name-price .prod-butt a:hover{
+    border-color: #03d8a3;
+}
+ {
+    border-color: #03d8a3;
+}
+.product-item .prod-qty img,.add-name-price .prod-qty img,.price-range-all .ui-slider-handle,.filter-bar,.wish-add,.full-desc-payments .tabs li,.gallery-thumbs .swiper-slide,form.order-qty-mn img {
+	cursor:pointer; 
+}
+.block-content {
+    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 20px 20px;
+    
+}
+nav.pagination li .page-numbers.current{
+	background: #03d8a3;
+}
+
+/*checkbox*/
+.checkbox-design {
+    position: relative;
+    color: #3B3B3B;
+	margin-bottom: 15px;
+	padding-left: 30px;
+	letter-spacing: 0.5px;
+	cursor: pointer;
+}
+.checkbox-design input{
+	position: absolute;
+	opacity: 0;
+}
+.checkbox-square {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    top: 0;
+    left: 0;
+    border: 1px solid #2CA9E0;
+    background: #ffffff;
+}
+.checkbox-design input:checked ~ .checkbox-square:before {
+    content: '';
+    width: 12px;
+    height: 6px;
+    top: 5px;
+    left: 5px;
+    border-left: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+    position: absolute;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.checkbox-design span:last-child {
+    margin-left: 4px;
+}
+
+@-webkit-keyframes CheckRadioAnimation{
+	from{-webkit-transform: scale(1.2); opacity: 0.1}
+	to{-webkit-transform: scale(1); opacity: 0.7}
+}
+@keyframes CheckRadioAnimation{
+	from{transform: scale(1.2); opacity: 0.1}
+	to{transform: scale(1); opacity: 0.7}
+}
+/*checkbox end */

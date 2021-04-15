@@ -1,0 +1,13 @@
+{% load static i18n %}
+<div class="swiper-slide">
+  <div class="slide-text">
+    <h2>{{slide.name}}</h2>
+    <p></p>
+    <div class="but-go">
+      <a href="#" class="button normal dark">{% trans "Սկսել գնումները" %}</a>
+    </div>
+  </div>
+  <div class="slide-img">
+    <img src="{{slide.image.url}}" alt="{{slide.name}}" />
+  </div>
+</div>

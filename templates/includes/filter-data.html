@@ -1,0 +1,100 @@
+{% load i18n %}
+<div class="row full-ban">
+    {% if products.count != 0 %}
+        {% for product in page_product %}
+            <div class="col col-3">
+                {% load static %} {% load i18n %}
+
+                <div class="product-item">
+                    <div class="product-image">
+                        <div class="g-flags">
+
+                            {% if product.published_timedelta  and product.variants_sale %}
+                                <span class="ns-prod prod-new">NEW</span>
+                                <span class="ns-prod prod-sale">SALE</span>
+
+                            {% elif product.published_timedelta  and product.variants_sale %}
+                                <span class="ns-prod prod-new">NEW</span>
+                            {% elif product.published_timedelta  and product.variants_sale %}
+
+                                <span class="ns-prod prod-sale">SALE</span>
+                            {% endif %}
+                        </div>
+                        <div class="wish-add">
+
+                            <img
+                                    src="{% static 'img/icons/wish-add.svg' %}"
+                                    class="w-add wishlist-add wishhing-{{ product.slug }}"
+                                    data-slug="{{ product.slug }}"
+                                    alt=""
+                            />
+
+                        </div>
+                        <a href="{{ product.get_absolute_url }}">
+
+                            <img
+                                    src="http://localhost:8000{{ product.productvariantimages_set.first.image.url }}"
+                                    class="only-prod-image lozad"
+                                    alt="{{ product.name|capfirst }}"
+                            />
+                        </a>
+                    </div>
+                    <div class="product-desc grad-block">
+                        <h3 class="product-name">
+                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                        </h3>
+
+                        <div class="prod-price">
+                            {% if product.productvariants_set.first.sale > 0 %}
+                                <span class="old-price">
+                                    <b>{{ product.productvariants_set.first.price }} <span>AMD</span></b>
+                                </span>
+
+                                <span class="new-price">
+                                <b>{{ product.productvariants_set.first.sale }} <span>AMD</span></b>
+                              </span>
+                            {% else %}
+
+                                <span class="new-price">
+                                <b>{{ product.productvariants_set.first.price }} <span>AMD</span></b>
+                              </span>
+                            {% endif %}
+                        </div>
+                        <div class="prod-add flex-content-center">
+                            <div class="prod-qty">
+                                <div class="number flex-content-center">
+                                    <img
+                                            src="{% static 'img/icons/minus.svg' %}"
+                                            class="minus"
+                                            alt=""
+                                    />
+                                    <input type="text" value="1" min="1" id="qty-{{ product.productvariants_set.first.id }}"/>
+                                    <img src="{% static 'img/icons/plus.svg' %}" class="plus" alt=""/>
+                                </div>
+                            </div>
+
+                            <div class="prod-butt">
+                                <button
+                                        type="button"
+                                        data-id="{{ product.productvariants_set.first.id }}"
+                                        class="add-cart flex-content-center submit_btn">
+                                        <img src="{% static 'img/icons/prod-but.svg' %}"/>
+                                        {% trans 'Ավելացնել' %}
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <h4>{% trans 'Հարցման ընթացքում ոչինչ չգտնվեց' %}</h4>
+    {% endif %}
+</div>
+
+{% if products.count > 1 %}
+    {% include 'includes/pagination.html' %}
+{% endif %}
+
