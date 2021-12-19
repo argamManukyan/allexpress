@@ -50,8 +50,10 @@
       <rect y="8" width="18" height="2"></rect>
     </svg>
   </span>
+  {% if '/search/' not in  request.get_full_path %}
   <div class="filter-bar">
     <img src="{% static 'img/icons/filter-bar.svg' %}" alt="{% trans 'Ֆիլտրեր' %}" />
     {% trans 'Ֆիլտրեր' %}
   </div>
+  {% endif %}
 </div>

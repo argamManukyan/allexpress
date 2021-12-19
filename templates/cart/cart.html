@@ -1,7 +1,5 @@
-{% load static %}{% load i18n %}
-<!DOCTYPE html>
+{% load static %}{% load i18n %}<!DOCTYPE html>
 <html lang="{{LANGUAGE_CODE}}">
-
 <head>
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
@@ -192,15 +190,12 @@
                                     {% for payment in payment_types %}
                                         <tr align="top" id="payment-block-{{forloop.counter}}">
                                             <th>
-                                                <input 
-                                                type="radio" 
-                                                id="pay-type-{{forloop.counter}}" 
-                                                class="payment-item" 
-                                                name="payment" 
-                                                value="{{payment.id}}">
+                                            <input type="radio" id="pay-type-{{forloop.counter}}" class="payment-item" name="payment" value="{{payment.id}}" onchange="setPayment()" {% if payment.id == 2 %} checked {% endif %}>
                                             </th>
                                             <td>
-                                                <label class="label" for="pay-type-{{forloop.counter}}"><b>{{payment.name}}</b></label>
+                                              <label class="label" for="pay-type-{{forloop.counter}}">
+                                                 <b>{{payment.name}}</b>
+                                              </label>
                                                 <div class="delivery-description">
                                                     {% if payment.paymenttypeicons_set.count %}
 
@@ -232,37 +227,68 @@
                             <div class="del-list-pay">
                                 <h3 class="order-page-title"><span>{% trans 'Առաքման տվյալներ' %}</span></h3>
                                 
-                                <form id="checkout-form" action="" method="POST" class="hidden-method">{% csrf_token %}
+                                <form id="checkout-form" action="" method="POST" class="hidden-method">
+                                    <input type="hidden" id="paymentUser" value="" name="payments">
+                                    {% csrf_token %}
                                     <h4 class="text-center">{% trans 'Պատվերի Ձեւակերպում' %}</h4>
-                                    <div  class="inputs-groups">
+                                 <div class="two-inputs flex-center-between">
+                                    <div class="inputs-groups">
                                         <span class="label">{% trans 'Անուն Ազգանուն' %} *:</span>
-                                        <input type="text" name="name" maxlength="150" required="" id="id_name">
+                                        <input type="text" name="name" maxlength="150" required="" id="id_name" value="{% if request.user %}{{request.user.first_name}}{% endif %}">
                                     </div>
                                     <div class="inputs-groups">
+                                        <span class="label">Էլ. հասցե :</span>
+                                        <input type="email" id="email" name="email" placeholder="Email" value="{% if request.user %}{{request.user.email}}{% endif %}">
+                                    </div>
+                                  </div>
+                                    
+                                   <div class="two-inputs flex-center-between">
+                                    <div class="inputs-groups">
                                         <span class="label">{% trans 'Հեռախոսահամար' %} *:</span>
-                                        <input type="text" name="phone" maxlength="150" required="" id="id_phone">
+                                        <input type="text" name="phone" maxlength="150" required="" 
+                                        value="{% if request.user and request.user.phone|length > 0 %}{{request.user.phone}}{% endif %}" id="id_phone">
                                     </div>
-
-                                    <div class="two-inputs flex-center-between variant-2">
-                                        <div class="inputs-groups">
-                                            <span class="label">{% trans 'Մարզ' %} * :</span>
-                                            <select id="City" class="js-select2" name="state_name">
-                                                <!--<option value="">{% trans 'Մարզ' %}</option>-->
-                                                {% for state in states %}
-                                                <option data-id="{{state.id}}" value="{{state.id}}">{{state.name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                        <div class="inputs-groups">
-                                            <span class="label">{% trans 'Բնակավայր' %} * :</span>
-                                            <select id="Region" class="js-select2" name="city_name">
-                                                <option value="">{% trans 'Բնակավայր' %}</option>
-                                                {% for city in cities %}
-                                                    <option data-price="{{city.price}}" value="{{city.id}}">{{city.name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <div class="inputs-groups">
+                                        <span class="label">Ստացողի Հեռախոսահամար *:</span>
+                                        <input type="text" name="phone2" maxlength="150" required="" 
+                                        value="{% if request.user and request.user.phone|length > 0 %}{{request.user.phone}}{% endif %}" id="id_phone">
                                     </div>
+                                  </div>
+                                    
+                                        <div class="two-inputs flex-center-between variant-2">
+                                                <div class="inputs-groups">
+                                                    <span class="label">{% trans 'Մարզ' %}</span>
+                                                    <select id="City" class="js-select2" name="state_name">
+                                                        
+                                                        {% for state in states %}
+                                                        <option data-id="{{state.id}}" value="{{state.id}}" {% if state.id == user.profile.state_id %}selected{% endif %}>{{state.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="inputs-groups">
+                                                    <span class="label">{% trans 'Բնակավայր' %}</span>
+                                                    <select id="Region" class="js-select2" name="city_name">
+                                                        <option value="">{% trans 'Բնակավայր' %}</option>
+                                                        {% if user.profile.state %}
+                                                            {% for city in user.profile.state.city_set.all %}
+                                                                <option  value="{{city.id}}" data-price="{{city.price}}"
+                                                                {% if city.id == user.profile.city_id %}selected{% endif %}
+                                                                >{{city.name}}</option>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                        
+                                                            {% for city in cities %}
+                                                                <option  value="{{city.id}}" data-price="{{city.price}}"
+                                                                {% if city.id == user.profile.city_id %}selected{% endif %}
+                                                                >{{city.name}}</option>
+                                                            {% endfor %}
+                                                        
+                                                        {% endif %}
+                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+                                          
                                     <div class="inputs-groups mb variant-2">
                                         <span class="label">{% trans 'Հասցե' %} * :</span>
                                         <textarea name="address" cols="20" rows="2" id="id_address"></textarea>
@@ -328,17 +354,14 @@
                     phone: {
                         required: true,
                     },
-                    address: {
+                    phone2: {
                         required: true,
-                    }
-                },
-                messages: {
-                    name: "{% trans 'Անուն Ազգանուն դաշտը պարտադիր է լրացման համար' %}",
-                    phone: {
-                        required: "{% trans 'Հեռախոսահամար դաշտը պարտադիր է լրացման համար' %}"
+                    },
+                    region: {
+                        required: true,
                     },
                     address: {
-                        required: "{% trans 'Առաքման հասցե դաշտը պարտադիր է լրացման համար' %}"
+                        required: true,
                     }
                 },
                 submitHandler: function (form) {
@@ -350,33 +373,19 @@
 
         
 
-        $('.methods-list').change(function () {
-            var input_radio = $('input[name="payment"]:checked').val();
-            var field_selcted = document.getElementById('id_stripe_type');
-
-            var selected_element_stripe = $('#id_stripe_type option:selected');
-            if (input_radio === selected_element_stripe) {
-                console.log('nuynnen')
-            } else {
-                selected_element_stripe.val(input_radio);
-                $('.payment-my-variant').val(input_radio);
-                $('#id_stripe_type').val(input_radio)
-            }
-
-        })
+        function setPayment(){
+            const payment = document.querySelector('input[name="payment"]:checked');
+            document.getElementById('paymentUser').setAttribute('value',payment.value)
+        }
+        setPayment()
 
 
-        // var adresserror = $('#id_address').attr('value');
-        // if (adresserror.length > 0) {
-        //     $('.errorlists').css({ 'display': 'none' });
-        // }
-        // else {
-        //     $('.errorlists').css({ 'display': 'block' });
-        // }
+
 
     </script>
 
     <script>
+        
 
         $('#City').on('change',function(){
         $.ajax({
@@ -408,16 +417,28 @@
         $('#Region').on('change',function(){
             const current_price = $(this).find(":selected")[0].attributes['data-price'].value
             const cart_all_price = document.getElementById('cart-total-price').innerText
-            console.log(cart_all_price)
-            // for (let i=0; i <= current_price.length;i++){
+            
                 $('#araqman_vjar').html(current_price)
                 $('#id_araqum').val(parseInt(current_price))
                 $('#id_all_total_price').val((parseInt(cart_all_price) + parseInt(current_price)))
                 $('#FinalSum').html((parseInt(cart_all_price) + parseInt(current_price)))
                 $('#finally').html(parseInt(cart_all_price) + parseInt(current_price))
-            // }
-            // console.log($(this).attr('data-price'))
+           
         })
+        
+        function regionSelected(){
+            const region = document.getElementById('Region')
+            const coast = region.options[region.selectedIndex].getAttribute('data-price')
+           
+            const cart_all_price = document.getElementById('cart-total-price').innerText
+            
+                $('#araqman_vjar').html(coast)
+                $('#id_araqum').val(parseInt(coast))
+                $('#id_all_total_price').val((parseInt(cart_all_price) + parseInt(coast)))
+                $('#FinalSum').html((parseInt(cart_all_price) + parseInt(coast)))
+                $('#finally').html(parseInt(cart_all_price) + parseInt(coast))
+        };
+        regionSelected()
 
         function changeQty(id){
             const qty = document.getElementById(`quantity-${id}`).value
@@ -456,6 +477,8 @@
                 document.getElementById('finally').innerText = parseInt(data.cart_total_price) + parseInt(delPrice) 
             })
         }
+
+
 
     </script>
 

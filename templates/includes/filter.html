@@ -3,6 +3,7 @@
     <div class="params-on-tit">
         <h4><span>{% trans "Ֆիլտրեր" %}</span></h4>
     </div>
+
     <form method="GET" id="filter" @change.prevent="filter" >
         <div class="filter-params active">
             <div class="filter-params-title">
@@ -145,13 +146,12 @@
                             <label for="id_size_{{ forloop.counter }}"
                                    class="checkbox-design align-items-center">
                                 <input id="id_size_{{ forloop.counter }}"
-                                       value="{{ size.productvariants__size }}"
+                                       value="{{ size.size }}"
                                        type="checkbox"
                                        name="size"
-                                {% if size.productvariants__size in request.get_full_path %}checked{% endif %}
                                 />
                                 <span class="checkbox-square"></span>
-                                <span>{{ size.productvariants__size|capfirst }}</span>
+                                <span>{{ size.size|capfirst }}</span>
                             </label>
 
                         {% endfor %}
@@ -159,7 +159,7 @@
                 </div>
             </div>
         {% endif %}
-        {% if weights.count > 0 %}
+        {% if weights|length >= 1 %}
             <div class="filter-params">
                 <div class="filter-params-title">
                     <h4 class="filter-params-hint flex-center-between">

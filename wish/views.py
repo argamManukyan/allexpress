@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.views.generic import View
 from .models import *
 from .mixins import WishMixin
+from shop.models import Product
+
 
 class WishView(WishMixin,View):
     
@@ -25,7 +27,35 @@ class RemoveWishView(WishMixin):
             
             body = json.loads(request.body)
             slug = body.get('slug')
-            wish.items.filter(product__product__slug=slug).first().delete()
+            wish.items.filter(product__slug=slug).first().delete()
             return JsonResponse({'wish_length':wish.items.count()},status=200)
             
+        return HttpResponse(status=400)
+
+
+class ChangeWish(WishMixin):
+    
+    def post(self,request,**kwargs):
+        context = super().get_context_data(request=request)
+        wish = context.get('wishlist')
+
+        if request.is_ajax():
+            
+            body = json.loads(request.body)
+            id_product = body.get('id')
+           
+            if wish.items.filter(product_id=id_product).exists():
+                
+                wish.items.filter(product_id=id_product).first().delete()
+                
+            else:    
+                try:
+                    product = Product.objects.get(id=id_product)
+                except:
+                    return HttpResponse(status=400) 
+                wish.items.create(product=product)
+                wish.save()
+            return HttpResponse(status=200)
+            
+
         return HttpResponse(status=400)

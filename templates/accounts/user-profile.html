@@ -24,13 +24,15 @@
     />
     <title>{% trans 'Բարի գալուստ' %} | Allexpress.am</title>
     <meta name="Description" content=""/>
-    <link rel="shortcut icon" href="{% static ' img/favicon.ico' %}"/>
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}"/>
     <script
             type="text/javascript"
             src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"
     ></script>
     <link rel="stylesheet" href="{% static 'css/color.css' %}"/>
     <link rel="stylesheet" href="{% static 'css/ex.css' %}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
+
 </head>
 
 <body>
@@ -93,7 +95,7 @@
                                       {% endfor %}
                                   {% endif %}
                                 </div>
-
+                                {{form.errors}}
                                 <div class="profile-info accountInfo">
                                     <ul>
                                         <li class="align-items-center">
@@ -101,11 +103,11 @@
                                             <span class="profile-row-content">{{ user.id }}</span>
                                         </li>
                                         <li class="align-items-center">
-                          <span class="profile-row-name"
-                          >{% trans "Անուն ազգանուն" %}</span
-                          >
+                                            <span class="profile-row-name"
+                                            >{% trans "Անուն ազգանուն" %}</span
+                                            >
                                             <span class="profile-row-content"
-                                            >{{ user.first_name }} {{ user.last_name }}</span
+                                            >{{ user.first_name }}</span
                                             >
                                         </li>
                                         <li class="align-items-center">
@@ -115,33 +117,53 @@
                                             >
                                         </li>
                                         <li class="align-items-center">
-                          <span class="profile-row-name"
-                          >{% trans "Հեռախոսահամար" %}:</span
-                          >
+                                            <span class="profile-row-name"
+                                            >{% trans "Հեռախոսահամար" %}:</span
+                                            >
                                             <span class="profile-row-content"
                                             >{{ user.phone }}</span
                                             >
                                         </li>
                                         <li class="align-items-center">
-                          <span class="profile-row-name"
-                          >{% trans "Հասցե" %}:</span
-                          >
+                                            <span class="profile-row-name"
+                                            >{% trans "Հասցե" %}:</span
+                                            >
                                             <span class="profile-row-content"
                                             >{{ user.address }}</span
                                             >
                                         </li>
+                                        {% if user.profile.state %}
                                         <li class="align-items-center">
-                          <span class="profile-row-name"
-                          >{% trans "Վերջին մուտք" %}:</span
-                          >
+                                            <span class="profile-row-name"
+                                            >{% trans "Մարզ" %}:</span
+                                            >
+                                            <span class="profile-row-content"
+                                            >{{ user.profile.state }}</span
+                                            >
+                                        </li>
+                                        {% endif %}
+                                        {% if user.profile.city %}
+                                        <li class="align-items-center">
+                                            <span class="profile-row-name"
+                                            >{% trans "Բնակավայր" %}:</span
+                                            >
+                                            <span class="profile-row-content"
+                                            >{{ user.profile.city }}</span
+                                            >
+                                        </li>
+                                        {% endif %}
+                                        <li class="align-items-center">
+                                            <span class="profile-row-name"
+                                            >{% trans "Վերջին մուտք" %}:</span
+                                            >
                                             <span class="profile-row-content"
                                             >{{ user.last_login|date:'d-m-Y h:i' }}</span
                                             >
                                         </li>
                                         <li class="align-items-center">
-                          <span class="profile-row-name"
-                          >{% trans "Գրանցման ամսաթիվ" %}:</span
-                          >
+                                                <span class="profile-row-name"
+                                                >{% trans "Գրանցման ամսաթիվ" %}:</span
+                                                >
                                             <span class="profile-row-content"
                                             >{{ user.date_joined|date:'d-m-Y h:i' }}</span
                                             >
@@ -174,10 +196,10 @@
                                     </div>
 
                                     <form
-                                            action=""
-                                            method="POST"
-                                            id="change-info-user"
-                                            novalidate="novalidate"
+                                        action=""
+                                        method="POST"
+                                        id="change-info-user"
+                                        novalidate="novalidate"
                                     >
                                         {% csrf_token %}
                                         <div>
@@ -186,13 +208,49 @@
                                                         type="text"
                                                         name="name"
                                                         placeholder="Անուն ազգանուն"
-                                                        value="{{ user.first_name }} {{ user.last_name }}"
+                                                        value="{% if user.first_name  %}{{ user.first_name }}{% endif %}{% if user.last_name  %}{{ user.last_name }}{% endif %}"
                                                         required
                                                 />
                                                 <span class="errorMessage"></span>
                                             </div>
 
+                                            <div class="two-inputs flex-center-between variant-2">
+                                                <div class="inputs-groups">
+                                                    <span class="label">{% trans 'Մարզ' %}</span>
+                                                    <select id="City" class="js-select2" name="state_name">
+                                                        
+                                                        {% for state in states %}
+                                                        <option data-id="{{state.id}}" value="{{state.id}}" {% if state.id == user.profile.state_id %}selected{% endif %}>{{state.name}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <div class="inputs-groups">
+                                                    <span class="label">{% trans 'Բնակավայր' %}</span>
+                                                    <select id="Region" class="js-select2" name="city_name">
+                                                        <option value="">{% trans 'Բնակավայր' %}</option>
+                                                        {% if user.profile.state %}
+                                                            {% for city in user.profile.state.city_set.all %}
+                                                                <option  value="{{city.id}}" 
+                                                                {% if city.id == user.profile.city_id %}selected{% endif %}
+                                                                >{{city.name}}</option>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                        
+                                                            {% for city in cities %}
+                                                                <option  value="{{city.id}}" 
+                                                                {% if city.id == user.profile.city_id %}selected{% endif %}
+                                                                >{{city.name}}</option>
+                                                            {% endfor %}
+                                                        
+                                                        {% endif %}
+                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="allexpress-form-group">
+                                               
+                                              
                                                 <input
                                                         type="text"
                                                         name="address"
@@ -254,36 +312,38 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr id="order-item-1" class="order-item4">
-                                        <td class="order-item-nom clr">
-                                            <span class="order-name-mobile">№</span>
-                                            <span class="right-orders"><b>1</b></span>
-                                        </td>
-                                        <td class="order-item-code clr">
-                                            <span class="order-name-mobile">Պատվերի կոդ</span>
-                                            <span class="right-orders"><b>4</b></span>
-                                        </td>
-                                        <td class="order-item-cnt clr">
-                                            <span class="order-name-mobile">Քանակ</span>
-                                            <span class="right-orders"> <b>1</b></span>
-                                        </td>
-                                        <td class="order-item-sum nowrap clr">
-                                            <span class="order-name-mobile">Ընդհանուր</span>
-                                            <span class="right-orders">2800<span>֏</span></span>
-                                        </td>
-                                        <td class="order-item-day nowrap clr">
-                                          <span class="order-name-mobile"
-                                          >Պատվիրման ամսաթիվ</span >
-                                          <span class="right-orders"
-                                            >28-04-2020 23:00<br
-                                            /></span>
-                                        </td>
-                                        <td class="order-item-more nowrap clr">
-                                            <a href="/order/4/" class="button small dark"
-                                            >Մանրամասն</a
-                                            >
-                                        </td>
-                                    </tr>
+                                        {% for order in user.order_set.all %}
+                                            <tr id="order-item-1" class="order-item">
+                                            <td class="order-item-nom clr">
+                                                <span class="order-name-mobile">№</span>
+                                                <span class="right-orders"><b>{{forloop.counter}}</b></span>
+                                            </td>
+                                            <td class="order-item-code clr">
+                                                <span class="order-name-mobile">Պատվերի կոդ</span>
+                                                <span class="right-orders"><b>{{order.id}}</b></span>
+                                            </td>
+                                            <td class="order-item-cnt clr">
+                                                <span class="order-name-mobile">Քանակ</span>
+                                                <span class="right-orders"> <b>{{order.productinorder_set.count}}</b></span>
+                                            </td>
+                                            <td class="order-item-sum nowrap clr">
+                                                <span class="order-name-mobile">Ընդհանուր</span>
+                                                <span class="right-orders">{{order.all_total_price}}<span>֏</span></span>
+                                            </td>
+                                            <td class="order-item-day nowrap clr">
+                                              <span class="order-name-mobile"
+                                              >Պատվիրման ամսաթիվ</span >
+                                              <span class="right-orders"
+                                                >{{order.created|date:'d-m-Y H:i'}}<br
+                                                /></span>
+                                            </td>
+                                            <td class="order-item-more nowrap clr">
+                                                <a href="{% url 'order' id=order.id %}" class="button small dark"
+                                                >Մանրամասն</a
+                                                >
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>
@@ -376,19 +436,23 @@
     <!-- cats banners end -->
 </main>
 <!-- Main content end -->
-{% include "includes/footer.html" %}
+    {% include 'includes/footer.html' %} {% include 'includes/menu.html' %}
 <!-- Footer -->
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="{% static 'js/script.js' %} "></script>
 <script src="{% static 'js/plugs.js' %} "></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.js"></script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.js"></script>
 
 
 <script>
+        $(".js-select2").select2();
+
 $("#phonenumber").mask("+374 (99) 99 99 99");
+
     $("#changeInfo").click(function () {
         $(".accountInfo").slideUp("fast");
         $(".changeAccount").slideDown("fast");
@@ -429,8 +493,49 @@ $("#phonenumber").mask("+374 (99) 99 99 99");
 
     });
 
+//   Country and Regions
+
+        $('#City').on('change',function(){
+        $.ajax({
+            method:'GET',
+            data:{id:$(this).find(":selected")[0].attributes['data-id'].value},
+            url:`{{request.get_raw_uri}}`,
+            headers:{
+                'X-Requested-With':'XMLHttpRequest'
+            },
+            success:function(data){
+                console.log(data);
+                if(data){
+                   
+                   $('#Region').html('')
+                for (let i = 0; i< data.length; i ++){
+                    $('#Region').append(`<option  value="${data[i].id}">${data[i].name}</option>`)
+                }}
+            },
+          
+            
+        })
+    })
+
+
+
+const chosenCity = document.getElementById('#City')
+
+// function countryData(){
     
+// }
     
+       
+//   Country and Regions
+
+// const formData = document.getElementById('change-info-user')
+// formData.addEventListener('submit',function(e){
+//     e.preventDefault();
+//     const params = Object.fromEntries(new FormData(this))
+//     console.log(params)
+    
+// })
+       
 
 </script>
 </body>

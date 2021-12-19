@@ -20,20 +20,20 @@
                                 <span class="ns-prod prod-sale">SALE</span>
                             {% endif %}
                         </div>
-                        <div class="wish-add">
+                        <div class="wish-add changeWish {% if product.id in wish_list_items %}active{% endif %} wish-added-{{product.id}}" 
+                        onclick='addOk({{product.id}})' >
 
                             <img
-                                    src="{% static 'img/icons/wish-add.svg' %}"
-                                    class="w-add wishlist-add wishhing-{{ product.slug }}"
-                                    data-slug="{{ product.slug }}"
-                                    alt=""
+                                src="{% static 'img/icons/wish-add.svg' %}"
+                                class="w-add wishlist-add"
+                                alt=""
                             />
-
+                
                         </div>
                         <a href="{{ product.get_absolute_url }}">
 
                             <img
-                                    src="http://localhost:8000{{ product.productvariantimages_set.first.image.url }}"
+                                    src="https://allexpress.am{{ product.productvariantimages_set.first.image.url }}"
                                     class="only-prod-image lozad"
                                     alt="{{ product.name|capfirst }}"
                             />
@@ -76,7 +76,8 @@
                             <div class="prod-butt">
                                 <button
                                         type="button"
-                                        data-id="{{ product.productvariants_set.first.id }}"
+                                        
+                                        onclick="addToCart({{ product.productvariants_set.first.id }})"
                                         class="add-cart flex-content-center submit_btn">
                                         <img src="{% static 'img/icons/prod-but.svg' %}"/>
                                         {% trans 'Ավելացնել' %}

@@ -1,0 +1,14 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}
+<p>You're receiving this email because you need to finish activation process on {{site}}.
+Please go to the following page to activate account:</p>
+{% endblocktrans %}
+
+{{link}}
+
+{% blocktrans %}
+<p>Thanks for using our site!</p>
+<p>The {{site}} team</p>
+{% endblocktrans %}
+{% endautoescape %}

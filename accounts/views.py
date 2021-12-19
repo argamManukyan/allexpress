@@ -2,8 +2,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.conf import settings
+from django.db.models import Q
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.http.response import HttpResponse, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseRedirect,JsonResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -12,6 +13,7 @@ from django.views import View
 from django.utils.translation import ugettext_lazy as _
 from .email import SendMail
 from .forms import *
+from cart.models import State,City,Order
 
 
 class LoginView(View):
@@ -48,6 +50,7 @@ class LoginView(View):
             if not 'next' in request.get_full_path():
                 return redirect('home')
             return HttpResponseRedirect(request.GET.get('next'))
+        return redirect('home')  
 
 
 class RegisterView(View):
@@ -64,26 +67,20 @@ class RegisterView(View):
             name = form.cleaned_data['name']
             phone = form.cleaned_data['phone']
 
-            
-            if len(name.split(' ')) == 2:
-                f_n = name.split(' ')[0]
-                l_n = name.split(' ')[1]
-            else:
-                f_n = name.split(' ')[0]
-
+         
             if User.objects.filter(phone=phone).exists():
                 messages.error(request, _('Այս հեռախոսահամարով օգտատեր արդեն գոյություն ունի։ '))
                 return redirect('register')
 
             instance = form.save()
             instance.is_active = False
-            instance.first_name = f_n
-            instance.username = f_n + str(instance.id)
+            instance.first_name = name
+            instance.username = instance.email.split('@')[0] + str(instance.id)
             instance.save()
             data = {'user': instance, 'request': request}
             SendMail.send_activation_message(data)
-
-            return redirect('faq')
+            messages.success(request, _('Շնորհակալություն գրանցման համար:<br>Խնդրում ենք հաստատեք Ձեր էլ․հասցեն գրանցումն ավարտելու համար:'))
+            return redirect('login')
         else:
 
             if form.errors.get('email'):
@@ -119,7 +116,8 @@ class ActivationEmail(View):
         except User.DoesNotExist:
             return HttpResponse(_("Տվյալների անհամապատասխանություն։ Օգտատերը չի գտնվել։ "))
 
-        messages.success(request, _('Շնորհակալություն։ Տվյալները հաջողությամբ հաստատված են։ '))
+        messages.success(request, _('Շնորհակալություն գրանցվելու  համար : <br> \n'
+                                    'Ձեր պրոֆիլը հաջողությամբ ակտիվացվել է։ '))
 
         data = {}
         data['request'] = request
@@ -127,7 +125,7 @@ class ActivationEmail(View):
         data['email'] = user.email
 
         SendMail.send_confirmation_message(data)
-        return redirect('faq')
+        return redirect('login')
 
 
 class ForgotPassword(View):
@@ -210,18 +208,36 @@ class UserProfileVIew(LoginRequiredMixin, View):
     login_url = settings.LOGIN_URL
 
     def get(self, request, **kwargs):
+        states = State.objects.all().order_by('id')
+        cities = City.objects.filter(state=states.first())
 
-        return render(request, 'accounts/user-profile.html')
+        if request.is_ajax():
+            
+            try:
+                cities = City.objects.filter(Q(state_id=int(request.GET['id'])))
+                return JsonResponse(data=list(cities.values('name','price','id')),safe=False)
+            except:
+                return JsonResponse(data={},safe=False)
+
+        return render(request, 'accounts/user-profile.html',locals())
 
     def post(self, request):
         form = UserProfileUpdateForm(request.POST or None, instance=request.user)
 
         
         if form.is_valid():
-            spl_name = request.POST.get('name').split(' ')
+            spl_name = request.POST.get('name')
+            city_name = request.POST.get('city_name')
+            state_name = request.POST.get('state_name')
             profile = form.save(commit=False)
-            profile.first_name = spl_name[0]
-            profile.last_name = spl_name[1] if len(spl_name) > 1 else ''
+            if city_name:
+                profile.profile.city_id = city_name
+                profile.profile.save()
+            if state_name:
+                profile.profile.state_id = state_name
+                profile.profile.save()
+
+            profile.first_name = spl_name
             messages.success(request, _('Ձեր տվյալները հաջողությամբ թարմացվել են։ '))
             profile.save(force_update=True)
 
@@ -258,3 +274,17 @@ class LogoutVIew(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
         return redirect('home')
+        
+
+class OrderMore(LoginRequiredMixin,View):
+    
+    def get(self,request,*args,**kwargs):
+        
+        try:
+            order = Order.objects.get(id=kwargs.get('id'),user=request.user)
+        except:
+            return redirect('profile')
+                
+        return render(request,'cart/user-thank_you.html',locals())
+        
+        

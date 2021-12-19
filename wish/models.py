@@ -1,11 +1,11 @@
 from django.db import models
-from shop.models import ProductVariants
+from shop.models import Product
 
 
 class WishItem(models.Model):
-    product = models.ForeignKey(ProductVariants,on_delete=models.CASCADE,null=True,blank=True)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,null=True,blank=True)
     def __str__(self):
-        return str(self.product.product.name)
+        return str(self.product.id)
 
 class Wish(models.Model):
 

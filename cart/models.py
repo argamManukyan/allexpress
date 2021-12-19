@@ -4,9 +4,8 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 
-
 class CartItem(models.Model):
-    product = models.ForeignKey(ProductVariants,on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariants, on_delete=models.CASCADE)
     qty = models.IntegerField(default=0)
     item_total = models.IntegerField(default=0)
 
@@ -42,12 +41,14 @@ class State(models.Model):
     class Meta:
         verbose_name='Մարզեր'
         verbose_name_plural='Մարզեր'
+        ordering = ['-id']
+
     
 class City(models.Model):
     
     state = models.ForeignKey(State,on_delete=models.SET_NULL,null=True,blank=True)
     name = models.CharField(max_length=100)
-    price = models.FloatField(default=0)
+    price = models.IntegerField(default=0)
     
     
     def __str__(self):
@@ -97,10 +98,11 @@ class OrderStatuses(models.Model):
 class Order(models.Model):
 
     """ Պատվեր """
+    # ORDER_STATUS_DEFAULT_VALUE = OrderStatuses.objects.first() if OrderStatuses.objects.count() > 0 else ''
 
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     payments = models.ForeignKey(PaymentTypes,on_delete=models.SET_NULL,null=True,blank=True)
-    order_status = models.ForeignKey(OrderStatuses,on_delete=models.SET_NULL,null=True,blank=True)
+    # order_status = models.ForeignKey(OrderStatuses,on_delete=models.SET_NULL,null=True,blank=True,default=ORDER_STATUS_DEFAULT_VALUE)
     total_price = models.PositiveIntegerField(default=0,blank=True,null=True)
     all_total_price = models.PositiveIntegerField(default=0,blank=True,null=True)
     order_id_ecc = models.CharField(max_length=80,blank=True,null=True)
@@ -120,7 +122,7 @@ class Order(models.Model):
 
     def __str__(self):
 
-        return f"{self.first_name} {self.last_name} - {self.all_total_price}"
+        return f"{self.name} - {self.all_total_price}"
         
     class Meta:
         ordering = ['-id']
@@ -132,6 +134,7 @@ class ProductInOrder(models.Model):
     """ Պատվերում գտնվող ապրանք """
 
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductVariants,on_delete=models.SET_NULL,null=True)
     product_name = models.CharField(max_length=120,blank=True)
     product_price = models.PositiveIntegerField(default=0,blank=True)
     product_image = models.ImageField(blank=True)

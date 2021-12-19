@@ -10,6 +10,19 @@ class PaymentIconsTabularInline(admin.TabularInline):
     extra = 1
 
 
+class OrderItemsInline(admin.TabularInline):
+
+    model = ProductInOrder
+    extra = 1
+    readonly_fields = ['product','product_price','item_total_price','product_name','product_image','qty']
+
+
+class OrderAdmin(admin.ModelAdmin):
+
+    list_display = [field.name for field in Order._meta.fields]
+    inlines = [OrderItemsInline]
+
+admin.site.register(Order,OrderAdmin)
 admin.site.register(Cart)
 admin.site.register(CartItem)
 

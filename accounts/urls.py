@@ -10,5 +10,6 @@ urlpatterns = [
     path('password-reset/',ForgotPassword.as_view(),name='password-reset'),
     path('password-reset-confirm/<uid64>/<token>/',ForgotPasswordConfirm.as_view(),name='password-reset-confirm'),
     path('password-change/',PasswordChangeView.as_view(),name='password-change'),
-    path('profile/',UserProfileVIew.as_view(),name='profile')
+    path('profile/',UserProfileVIew.as_view(),name='profile'),
+    path('order/<id>/',OrderMore.as_view(),name='order'),
 ]

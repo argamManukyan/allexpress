@@ -58,6 +58,6 @@ class SendMail:
 
         url = 'http://'+site+'/password-reset-confirm/'+uid64+'/'+token+'/'
         recipient_list = [user.email]
-        message = render_to_string('email/password-reset.txt',{'user':user,'site':site,'link':url})
+        message = render_to_string('email/password-reset.html',{'user':user,'site':site,'link':url})
 
         send_mail(_('Password reset link. '),message,from_email=admin_email,recipient_list=recipient_list,html_message=message)

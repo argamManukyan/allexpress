@@ -1,10 +1,15 @@
 .idea/
 env/
+*.pyc
 __pycache__/
-migrations/*
+migrations/
 .env
 db.sqlite2
 TODO.txt
 static/
-# static_dev/
+static_dev/
 media/
+tmp/
+venv/
+locale/
+.vscode/

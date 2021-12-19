@@ -1,0 +1,170 @@
+{% load static %}{% load i18n %}<!DOCTYPE html>
+<html lang="{{LANGUAGE_CODE}}">
+<head>
+<!-- End Google Tag Manager -->
+    <meta charset='utf-8'/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{% trans 'Պատվեր' %} № {{ order.id }} | Allexpress.am</title>
+    <meta name="Description" content="">
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/color.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+</head>
+<body>
+<!-- Header -->
+{% include 'includes/header.html' %}
+
+<!-- Main content -->
+<main id="content" role="main">
+    <!-- cats banners -->
+    <section class="user-page">
+        <div class="cnt">
+            <div class="row">
+                <div class="col">
+                    <div class="all-head-info">
+                        <div class="slide-tit">
+                            <h3><span>{% trans 'Պատվեր' %} № <span>{{ order.id }}</span></span></h3>
+                            {% for message in messages %}
+                                {{message|safe}}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div id="order-table">
+                        <table>
+                            <thead>
+                            <tr class="order-head">
+                                <th class="order-item-nom" width="1%">№</th>
+                                <th class="order-head-img">{% trans 'Նկար' %}</th>
+                                <th class="order-head-name">{% trans 'Անվանում' %}</th>
+                                <th class="order-head-price" width="1%">{% trans 'Գին' %}</th>
+                                <th class="order-head-cnt nowrap" width="1%">{% trans 'Քանակ' %}</th>
+                                <th class="order-head-sum" width="1%">{% trans 'Արժեք' %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for product_in_order in order.productinorder_set.all %}
+                                <tr id="order-item-1" class="order-item ">
+                                    <td class="order-item-nom"><b>{{ forloop.counter }}</b></td>
+                                    <td class="order-item-img" align="center" width="1%">
+                                        <img src="{{ product_in_order.product_image.url }}"
+                                             alt="{{ product_in_order.product.name|capfirst }}">
+                                    </td>
+                                    <td class="order-item-name">
+                                        <a href="{{ product_in_order.product.get_absolute_url }}">{{ product_in_order.product_name|capfirst }}</a>
+                                    </td>
+                                    <td class="order-item-price nowrap clr">
+                                        <span class="order-name-mobile">Գին</span>
+                                        <span class="right-orders">{{ product_in_order.product.get_prices }} <span>֏</span></span>
+                                    </td>
+                                    <td class="order-item-cnt clr">
+                                        <span class="order-name-mobile">Քանակ</span>
+                                        <span class="right-orders"><b>{{ product_in_order.qty }}</b></span>
+                                    </td>
+                                    <td class="order-item-sum nowrap clr">
+                                        <span class="order-name-mobile">Արժեք</span>
+                                        <span class="right-orders">{{ product_in_order.item_total_price }} <span>֏</span></span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="order-total-line">
+                        <div class="total-price-all flex-center-between">
+                            <table class="cart-summ">
+                                <tbody>
+                                <tr class="cart-summ-subtotal">
+                                    <td class="cart-summ-label">Արժեք:</td>
+                                    <td class="cart-summ-value">{{ order.total_price }} <span>֏</span></td>
+                                </tr>
+                                {% if order.delivery_price > 0 %}
+                                <tr class="cart-summ-shipping">
+                                    <td class="cart-summ-label">
+                                        <span class="text-nowrap">Առաքում:</span>
+                                    </td>
+                                    <td class="cart-summ-value">
+                                        <span class="cart-summ-araqum">
+                                            {{order.delivery_price}} 
+                                            <span>֏</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr class="cart-summ-total">
+                                    <td class="cart-summ-label"><b>Ընդհանուր:</b></td>
+                                    <td class="cart-summ-value">
+                                        <b><span>{{ order.all_total_price }} <span>֏</span></span></b>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-2">
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Վճարման եղանակ</span></h3>
+                        <div class="delivery-description payments-methods">
+                            <p>{{ order.payments }}</p>
+                        </div>
+                    </div>
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Պատվիրման ամսաթիվ</span></h3>
+                        <div class="delivery-description payments-methods">
+                            <p>{{ order.created|date:'d-m-Y H:i' }}</p>
+                        </div>
+                    </div>
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Պատվերի Կարգավիճակ</span></h3>
+                        <div class="delivery-description payments-methods">
+                            <p>{{ order.order_status }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-2">
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Առաքման հասցե</span></h3>
+                        <div class="delivery-description payments-methods">
+                            <p>{{ order.address }}</p>
+                        </div>
+                    </div>
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Հեռախոս</span></h3>
+                        <div class="delivery-description payments-methods">
+                            <p>{{ order.phone }}</p>
+                        </div>
+                    </div>
+                    {% if order.comments|length > 0 %}
+                    <div class="del-list-pay orders-mores">
+                        <h3 class="order-page-title"><span>Նշումներ</span></h3>
+                        <div class="delivery-description payments-methods">
+                                <p>{{ order.comments }}</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- cats banners end -->
+</main>
+<!-- Main content end -->
+
+<!-- Footer -->
+
+{% include 'includes/footer.html' %}
+{% include 'includes/menu.html' %}
+
+<!--Menu end -->
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+<script src="{% static 'js/plugs.js' %}"></script>
+</body>
+
+</html>

@@ -22,11 +22,11 @@ class ProductTranslation(TranslationOptions):
 
 @register(ProductVariants)
 class ProductVariantsTranslation(TranslationOptions):
-    fields = ['size']
+    fields = ['size','description','short_description']
 
 @register(SpecialOffer)
 class SpecialOfferTranslation(TranslationOptions):
-    fields = ['name','description']
+    fields = ['name','description','url']
     
 @register(Sliders)
 class SlidersTranslation(TranslationOptions):

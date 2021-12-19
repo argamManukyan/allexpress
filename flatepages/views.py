@@ -53,7 +53,7 @@ class PrivacypolicyView(View):
     
     def get(self,request,**kwargs):
         policy = PrivacyAndPolicy.objects.first()
-        return  render(request,'flatepages/delivery-payment.html',locals())
+        return  render(request,'flatepages/privacy-policy.html',locals())
 
 
 

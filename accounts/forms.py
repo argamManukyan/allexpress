@@ -25,10 +25,11 @@ class ResetPasswordForm(forms.Form):
     new_password2 = forms.CharField()
     
 class UserProfileUpdateForm(forms.ModelForm):
-
+    
+    address = forms.CharField(required=False)
     class Meta:
         model = User
-        fields = ['first_name','last_name','phone','address',]
+        fields = ['first_name','phone','address',]
 
   
 

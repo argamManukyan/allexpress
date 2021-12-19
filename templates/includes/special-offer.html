@@ -2,29 +2,31 @@
 <div class="col col-2">
   <div class="offer-block">
     <div class="offer-left">
-      <img
-        src="{% static 'img/icons/hot-icon.png' %}"
-        class="hot-sale"
-        alt="Հատուկ առաջարկ"
-      />
+      <img src="{% static 'img/icons/hot-icon.png' %}" class="hot-sale" alt="Special offer"/>
       <div class="name-desc-price">
         <h2>{{offer.name}}</h2>
-        <p>{{offer.description}}</p>
+        {{offer.description|safe}}
         <div class="offer-price">
           <div class="prod-price">
+              {% if offer.sale > 0 %}
             <span class="old-price">
-              <b>2050<span>AMD</span></b>
+              <b>{{offer.price}}<span> AMD</span></b>
             </span>
             <span class="new-price">
-              <b>1990<span>AMD</span></b>
+              <b>{{offer.sale}}<span> AMD</span></b>
             </span>
+            {% else %}
+             <span class="new-price">
+              <b>{{offer.price}}<span> AMD</span></b>
+            </span>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
     <div class="offer-right">
-      <img src="{% static 'img/hot-1.png' %}" alt="{{offr.name}}" />
-      <a href="#" class="button normal dark">{% trans "Մանրամասն" %}</a>
+      <img src="{{offer.image.url}}" alt="{{offr.name}}" />
+      <a href="{{offer.url}}" class="button normal dark">{% trans "Մանրամասն" %}</a>
     </div>
   </div>
 </div>

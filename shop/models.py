@@ -9,9 +9,9 @@ from django.db.models.signals import post_save
 
 
 class Sliders(models.Model):
-    image = models.ImageField(upload_to='slider_images/', verbose_name='Նկար')
-    context = RichTextUploadingField(verbose_name='Նկարագրություն')
-    url = models.URLField(verbose_name='Հղում')
+    image = models.ImageField(upload_to='slider_images/', verbose_name='Նկար',blank=True)
+    context = RichTextUploadingField(verbose_name='Նկարագրություն',blank=True)
+    url = models.URLField(verbose_name='Հղում',blank=True)
 
     def __str__(self):
         return str(self.pk)
@@ -22,11 +22,13 @@ class Sliders(models.Model):
 
 
 class SpecialOffer(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Անուն')
-    url = models.URLField(verbose_name='Հղում')
-    image = models.FileField(upload_to='offer_images/', verbose_name='Նկար')
+    name = models.CharField(max_length=150, verbose_name='Անուն',blank=True)
+    url = models.URLField(verbose_name='Հղում',blank=True)
+    image = models.FileField(upload_to='offer_images/', verbose_name='Նկար',blank=True)
     description = RichTextUploadingField(blank=True, verbose_name='Նկարագրություն')
-
+    price = models.IntegerField(default=0)
+    sale = models.IntegerField(default=0)
+    
     def __str__(self):
         return self.name
 
@@ -36,16 +38,18 @@ class SpecialOffer(models.Model):
 
 
 class Category(MPTTModel):
-    name = models.CharField(max_length=50, verbose_name='Անուն')
+    name = models.CharField(max_length=50, verbose_name='Անուն',blank=True)
     slug = models.SlugField(unique=True, blank=True, verbose_name='Հղում')
-    icon = models.FileField(upload_to='category_images/')
-    image = models.FileField(upload_to='category_images/')
+    icon = models.FileField(upload_to='category_images/',blank=True)
+    image = models.FileField(upload_to='category_images/',blank=True)
     meta_title = models.CharField(max_length=200,blank=True, verbose_name='Մետա անուն')
     meta_description = models.TextField(max_length=300,blank=True, verbose_name='Մետա նկարագրություն')
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
+    view_in_homepage = models.BooleanField(default=False,verbose_name="Ցուցադրել գլխավոր էջում")
+    
+    
     class MPTTMeta:
         level_attr = 'mptt_level'
         order_insertion_by = ['name']
@@ -86,8 +90,8 @@ class Category(MPTTModel):
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Անուն')
-    icon = models.FileField(upload_to='brand_icons/')
+    name = models.CharField(max_length=150, verbose_name='Անուն',blank=True)
+    icon = models.FileField(upload_to='brand_icons/',blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -100,8 +104,8 @@ class Brand(models.Model):
 
 
 class Color(models.Model):
-    name = models.CharField(max_length=150, verbose_name='Անուն')
-    code = models.CharField(max_length=30)
+    name = models.CharField(max_length=150, verbose_name='Անուն',blank=True)
+    code = models.CharField(max_length=30,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -130,11 +134,20 @@ class Product(models.Model):
     views_count = models.PositiveIntegerField(default=0, blank=True, verbose_name='Դիտումների քանակ')
     meta_title = models.CharField(max_length=200, blank=True,verbose_name='Մետա անուն')
     meta_description = models.TextField(blank=True,verbose_name='Մետա նկարագրություն')
-    # is_popular = models.BooleanField(default=False,verbose_name='Հայտնի ապրանք')
-
+    is_popular = models.BooleanField(default=False,verbose_name='Հայտնի ապրանք')
+    filter_price = models.IntegerField(blank=True,null=True,editable=False)
+    
     def get_absolute_url(self):
         return reverse("product-details", kwargs={"slug": self.slug})
-
+    
+    def save(self,*args,**kwargs):
+        
+        if self.productvariants_set.count():
+            if self.filter_price != self.productvariants_set.first().filter_price:
+                self.filter_price = self.productvariants_set.first().filter_price
+        
+        super().save(*args,**kwargs)
+    
     def __str__(self):
         return self.name
 
@@ -143,7 +156,7 @@ class Product(models.Model):
 
     def variants_sale(self):
         if self.productvariants_set.count():
-            return bool(self.productvariants_set.filter(models.Q(sale__isnull=False) | ~models.Q(sale=0)).count() > 0)
+            return self.productvariants_set.filter(sale__gte=1).count() > 0
         return False
 
     class Meta:
@@ -157,12 +170,13 @@ class Product(models.Model):
 class ProductVariants(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     color = models.ForeignKey(Color, null=True, blank=True, on_delete=models.SET_NULL, verbose_name='Գույն')
-    size = models.CharField(max_length=150, verbose_name='Չափս')
-    product_code = models.CharField(max_length=15, verbose_name='Ապրանքի կոդ')
-    price = models.IntegerField(default=0, verbose_name='Գին')
-    sale = models.IntegerField(default=0, verbose_name='Զեղչված գին')
+    size = models.CharField(max_length=150, verbose_name='Չափս',blank=True)
+    product_code = models.CharField(max_length=15, verbose_name='Ապրանքի կոդ',blank=True)
+    price = models.IntegerField(default=0, verbose_name='Գին',blank=True)
+    sale = models.IntegerField(default=0, verbose_name='Զեղչված գին',blank=True)
     description = RichTextUploadingField(blank=True, null=True)
-    filter_price = models.IntegerField(blank=True,null=True)
+    short_description = RichTextUploadingField(blank=True, null=True)
+    filter_price = models.IntegerField(blank=True,null=True,editable=False)
 
     def __str__(self):
         col = self.color.name if self.color is not None else ''
@@ -197,9 +211,12 @@ def slug_post_save(sender, instance, *args, **kwargs):
         variants = ProductVariants.objects.filter(product=product)
         for variant in variants:
             variant.save()
+        
+        
     except:
         pass
-
+    
+    
 
 post_save.connect(slug_post_save, sender=Product)
 

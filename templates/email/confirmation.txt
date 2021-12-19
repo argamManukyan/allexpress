@@ -1,9 +1,0 @@
-{% load i18n %}
-{% autoescape off %}
- {% trans 'You account successfuly activated.' %} 
-
-{% blocktrans %} 
-Thanks for using our site!
-The {{site}} team 
-{% endblocktrans %}
-{% endautoescape %}

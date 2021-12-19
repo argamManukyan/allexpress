@@ -1,9 +1,7 @@
 {% load static %} {% load i18n %}
-
 <div class="product-item">
     <div class="product-image">
         <div class="g-flags">
-
             {% if product.published_timedelta  and product.variants_sale %}
                 <span class="ns-prod prod-new">NEW</span>
                 <span class="ns-prod prod-sale">SALE</span>
@@ -20,32 +18,23 @@
             onclick="wishList(`{{product.slug}}`)"
         >×</span>
         {% else %}
-        <div class="wish-add">
-
-            <img
-                src="{% static 'img/icons/wish-add.svg' %}"
-                id="wish-{{ product.slug }}"
-                class="w-add wishlist-add active"
-                data-slug="{{ product.slug }}"
-                alt=""
-            />
-
+        <div class="wish-add changeWish {% if product.id in wish_list_items %}active{% endif %} wish-added-{{product.id}}" onclick='addOk({{product.id}})'>
+            <img src="{% static 'img/icons/wish-add.svg' %}" class="w-add wishlist-add" alt="Wish" />
         </div>
         {% endif %}
         <a href="{{ product.get_absolute_url }}">
 
-            <img
-                    data-src="http://localhost:8000{{ product.productvariantimages_set.first.image.url }}"
-                    class="only-prod-image lozad"
-                    alt="{{ product.name|capfirst }}"
-            />
+            <img data-src="https://allexpress.am{{ product.productvariantimages_set.first.image.url }}" class="only-prod-image lozad" alt="{{ product.name|capfirst }}" />
         </a>
     </div>
     <div class="product-desc grad-block">
         <h3 class="product-name">
-            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+            <a href="{{ product.get_absolute_url }}">{{ product.name }} </a>
         </h3>
-
+        {% if product.productvariants_set.first.short_description|length > 0 %}
+        <p>{{product.productvariants_set.first.short_description|safe}}</p>
+        {% endif %}
+        <h5 class="prod-cat-name"><a href="{{product.category.get_absolute_url}}">{{product.category.name}}</a></h5>
         <div class="prod-price">
             {% if product.productvariants_set.first.sale > 0 %}
                 <span class="old-price">
@@ -77,7 +66,7 @@
 
             <div class="prod-butt">
                 <button
-                        data-id="{{ product.productvariants_set.first.id }}"
+                        onclick="addToCart({{ product.productvariants_set.first.id }})"
                         type="button"
                         class="add-cart flex-content-center submit_btn">
                     <img src="{% static 'img/icons/prod-but.svg' %}"/>

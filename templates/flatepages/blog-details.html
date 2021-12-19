@@ -88,16 +88,7 @@
             <div class="col">
               <div class="home-blog full-blog-page">
                 <div class="blog-image">
-                  <img
-                    src="{{blog.image.url}}"
-                    class="img-responsive full-img"
-                    alt="blog"
-                  />
-                  <img
-                    src="{% static 'img/icons/default-icon.png' %}"
-                    alt=""
-                    class="blog-def"
-                  />
+                  <img src="{{blog.image.url}}" class="img-responsive full-img" alt="{{blog.title|capfirst}}"/>
                 </div>
                 <div class="full-blog-desc">
                   <div class="post-details">

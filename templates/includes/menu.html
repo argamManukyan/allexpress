@@ -1,15 +1,66 @@
-{% comment %} {% load static %}
-
+ {% load static i18n %}
+{% load mptt_tags %}
 <div class="mobile_menu_container">
   <div class="mobile_menu_content">
     <div class="mob-menu-head">
       <ul class="mob-langs">
+        {% if request.LANGUAGE_CODE == 'ru' %}
         <li>
-          <a href="https://allexpress.am/ru{{ request.get_full_path }}"
+          <a href="javascript:void(0)"
             ><img
               src="{% static 'img/icons/russian.png' %}"
               alt="{% trans 'Русский' %}"
-            />Рус</a
+            />RUS</a
+          >
+        </li>
+        <li>
+          <a href="https://allexpress.am/en{{ request.get_full_path|cut:'/ru' }}"
+            ><img
+              src="{% static 'img/icons/armenian.png' %}"
+              alt="{% trans 'Հայերեն' %}"
+            />ARM</a
+          >
+        </li>
+        <li>
+          <a href="https://allexpress.am/en{{ request.get_full_path|cut:'/ru' }}"
+            ><img
+              src="{% static 'img/icons/english.png' %}"
+              alt="{% trans 'English' %}"
+            />Eng</a
+          >
+        </li>
+        {% elif request.LANGUAGE_CODE == 'en' %}
+        <li>
+          <a href="javascript:void(0)"
+            ><img
+              src="{% static 'img/icons/english.png' %}"
+              alt="{% trans 'English' %}"
+            />ENG</a
+          >
+        </li>
+        <li>
+          <a href="https://allexpress.am{{ request.get_full_path|cut:'/en' }}"
+            ><img
+              src="{% static 'img/icons/armenian.png' %}"
+              alt="{% trans 'Հայերեն' %}"
+            />ARM</a
+          >
+        </li>
+        <li>
+          <a href="https://allexpress.am/ru{{ request.get_full_path|cut:'/en' }}"
+            ><img
+              src="{% static 'img/icons/russian.png' %}"
+              alt="{% trans 'Russian' %}"
+            />RUS</a
+          >
+        </li>
+        {% else %}
+        <li>
+          <a href="javascript:void(0)"
+            ><img
+              src="{% static 'img/icons/armenian.png' %}"
+              alt="{% trans 'Armenian' %}"
+            />ARM</a
           >
         </li>
         <li>
@@ -17,9 +68,18 @@
             ><img
               src="{% static 'img/icons/english.png' %}"
               alt="{% trans 'English' %}"
-            />Eng</a
+            />ENG</a
           >
         </li>
+        <li>
+          <a href="https://allexpress.am/ru{{ request.get_full_path }}"
+            ><img
+              src="{% static 'img/icons/russian.png' %}"
+              alt="{% trans 'Russian' %}"
+            />RUS</a
+          >
+        </li>
+        {% endif %}
       </ul>
       <a href="#" class="close-side-widget"
         ><img src="{% static 'img/icons/close.svg' %}" alt="{% trans 'Փակել' %}"
@@ -29,7 +89,7 @@
       <ul class="text-center sign-in-head-mob">
         {% if request.user.is_authenticated %}
         <li class="mob-sign-flex">
-          <a href="{% url 'profile' username=request.user.username %}">
+          <a href="{% url 'profile' %}">
             <img
               src="{% static 'img/icons/user.svg' %}"
               class="top-icon"
@@ -62,44 +122,36 @@
         {% endif %}
       </ul>
       <ul>
-        {% for category in categories %}
+        {% recursetree categories %}
         <li>
-          <a href="#" class="parent">{{ category.name|capfirst }}</a>
-          <ul>
-            <li><a href="#" class="back">{% trans 'Գնալ հետ' %}</a></li>
-            <li>
-              <a href="{{category.get_absolute_url}}"
-                >{{ category.name|capfirst }}</a
-              >
-            </li>
-            {% for subcategory in category.subcategory_set.all %}
-            <li>
-              <a href="{{subcategory.get_absolute_url}}" class="parent"
-                >{{ subcategory.name|capfirst }}</a
-              >
+          <a href="{{node.get_absolute_url}}" {% if not node.is_leaf_node %} class="parent" {% endif %}>{{ node.name|capfirst }}</a>
+
+          {% if not node.is_leaf_node %}
               <ul>
-                <li><a href="#" class="back">Գնալ հետ</a></li>
-                {% for podcat in subcategory.podcategory_set.all %}
                 <li>
-                  <a href="{{podcat.get_absolute_url}}"
-                    >{{ podcat.name|capfirst }}</a
-                  >
+                  <a href="#" class="back">{% trans "Գնալ հետ" %}</a>
                 </li>
-                {% endfor %}
+                
+                  <li>
+                    <a href="{{children.get_absolute_url}}"
+                      >{{ children }}
+                    </a>
+                    
+                  </li>          
               </ul>
-            </li>
-            {% endfor %}
-          </ul>
+          {% endif %}
         </li>
-        {% endfor %}
-        <li><a href="{% url 'mer-masin' %}">{% trans 'Մեր մասին' %}</a></li>
+        {% endrecursetree %}
+          
+    
+        <li><a href="{% url 'about-us' %}">{% trans 'Մեր մասին' %}</a></li>
         <li><a href="{% url 'blog' %}">{% trans 'Բլոգ' %}</a></li>
-        <li><a href="{% url 'inchpes-patvirel' %}">{% trans 'Ինչպես պատվիրել' %}</a></li>
-        <li><a href="{% url 'araqum-ev-vcharum' %}">{% trans 'Առաքում և վճարում' %}</a></li>
-        <li><a href="{% url 'apranqi-veradardz' %}">{% trans 'Ապրանքի վերադարձ' %}</a></li>
-        <li><a href="{% url 'faq' %}"></a>{% trans 'Հաճախակի տրվող հարցեր' %}</a></li>
-        <li><a href="{% url 'policy' %}">{% trans 'Գաղտնիության քաղաքականություն' %}</a></li>
-        <li class="sale-link"><a href="#">Sale 30%</a></li>
+        <li><a href="{% url 'how-to-order' %}">{% trans 'Ինչպես պատվիրել' %}</a></li>
+        <li><a href="{% url 'delivery-and-payment' %}">{% trans 'Առաքում և վճարում' %}</a></li>
+        <li><a href="{% url 'return_proces' %}">{% trans 'Ապրանքի վերադարձ' %}</a></li>
+        <li><a href="{% url 'faq' %}">{% trans 'Հաճախակի տրվող հարցեր' %}</a></li>
+        <li><a href="{% url 'privacy-policy' %}">{% trans 'Գաղտնիության քաղաքականություն' %}</a></li>
+        <li class="sale-link"><a href="{% url 'sales' %}">Hot Sale</a></li>
       </ul>
     </div>
     <div class="mob-widget-footer">
@@ -107,4 +159,4 @@
     </div>
   </div>
 </div>
-<div class="mobile_menu_overlay"></div> {% endcomment %}
+<div class="mobile_menu_overlay"></div>

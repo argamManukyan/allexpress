@@ -138,14 +138,12 @@
                             id="registered"
                             checked=""
                           />
-                          <span class="checkbox-square"></span>{% trans 'Ես
-                          համաձայն եմ Allexpress-ի' %}
+                          <span class="checkbox-square"></span>{% trans 'Ես համաձայն եմ Allexpress-ի' %}
                           <a
-                            href="https://allexpress.am/policy/"
+                            href="{% url 'privacy-policy' %}"
                             style="color: #52bdec; text-decoration: underline"
                             target="_blank"
-                            >{% trans 'պայմաններին և գաղտնիության
-                            քաղաքականությանը:' %}</a
+                            >{% trans 'պայմաններին և գաղտնիության քաղաքականությանը:' %}</a
                           >
                         </label>
                       </div>

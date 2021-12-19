@@ -150,9 +150,9 @@
                             <div class="products-sorting">
                                 <select name="ordering" required="" id="id_ordering">
                                     <option value="-id" selected>{% trans 'Դասավորել' %}</option>
-                                    <option value="-productvariants__filter_price">{% trans 'Սկզբում թանկերը' %}
+                                    <option value="-filter_price">{% trans 'Սկզբում թանկերը' %}
                                     </option>
-                                    <option value="productvariants__filter_price">{% trans 'Սկզբում էժանները' %}
+                                    <option value="filter_price">{% trans 'Սկզբում էժանները' %}
                                     </option>
                                     <option value="name">{% trans 'Ըստ անվանման' %}</option>
                                     <option value="created">{% trans 'Հին ավելացվածները' %}</option>
@@ -177,7 +177,7 @@
                                 {% endif %}
                             </div>
 
-                            {% if products.count > 1 %}
+                            {% if products.count > 9 %}
                                 {% include 'includes/pagination.html' %}
                             {% endif %}
 
@@ -189,17 +189,16 @@
     </main>
     <!-- Main content end -->
 
-    {% include 'includes/footer.html' %}
-    {% include 'includes/menu.html' %}
+        {% include 'includes/footer.html' %} {% include 'includes/menu.html' %}
+
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
     <script src="{% static 'js/script.js' %}"></script>
     <script src="{% static 'javascript/add-to-cart.js' %}"></script>
     <script src="{% static 'javascript/filters.js' %}"></script>
-    <script src="{% static 'javascript/wish.js' %}"></script>
+    <script src="{% static 'javascript/wish.js' %}"></script> 
     <script>
 
         if (window.location.search == "") {

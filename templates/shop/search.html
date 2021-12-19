@@ -23,6 +23,30 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/color.css' %}">
     <link rel="stylesheet" href="{% static 'css/ex.css' %}">
+     <style>
+        .loader {
+            border: 5px solid #cccccc;
+            border-top: 5px solid #5fb5c0;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+            position: absolute;
+            left: 50%;
+            top: 35%;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -66,13 +90,31 @@
                             </nav>
                         </div>
                         <!--Filter-->
-
+                    {% if '/sales/' in request.get_full_path %}
                         <!--Filter end -->
-
+                        <div class="filter_menu_container">
+                            <div class="filter_menu_content">
+                                <div class="cart-widget">
+                                    <div class="widget-heading flex-center-between">
+                                        <h3 class="widget-title">{% trans 'Ֆիլտրեր' %}</h3>
+                                        <a href="#" class="close-side-widget">{% trans 'Փակել' %}
+                                            <img src="{% static 'img/icons/close.svg' %}" alt="{% trans 'Փակել' %}">
+                                        </a>
+                                    </div>
+                                </div>
+                                {% include 'includes/filter.html' %}
+                            </div>
+                        </div>
                     </div>
+                    <div class="filter_menu_overlay"></div>
+                    {% else %}
+                    </div>
+                    {% endif %}
+                    
+
                     <div class="col col-9">
                         <div class="shop-title-h1">
-                            <h1><span>{% trans 'Որոնում' %}</span></h1>
+                            <h1><span> {% if '/sales/' not in request.get_full_path %}{% trans 'Որոնում' %}{% else %}{% trans 'Զեղչված տեսականի' %}{% endif %}</span></h1>
                         </div>
                         <div id="breadcrumb">
                             <ul class="breadcrumbs-list">
@@ -82,13 +124,31 @@
                                 </li>
                                 <li class="b-list-item">
                                     <meta itemprop="position" content="1">
-                                    <span itemprop="name">{{ q }}</span>
+                                    <span itemprop="name">{% if q %}{{ q }}{% else %}{% trans 'Զեղչված տեսականի' %}{% endif %}</span>
                                 </li>
                             </ul>
                         </div>
+                        
+                        <div class="products-settings">
+                            {% include "includes/view-mode.html" %}
+                            {% if 'sales' in request.get_full_path  %}
+                            <div class="products-sorting">
+                                <select name="ordering" required="" id="id_ordering">
+                                    <option value="-id" selected>{% trans 'Դասավորել' %}</option>
+                                    <option value="-filter_price">{% trans 'Սկզբում թանկերը' %}
+                                    </option>
+                                    <option value="filter_price">{% trans 'Սկզբում էժանները' %}
+                                    </option>
+                                    <option value="name">{% trans 'Ըստ անվանման' %}</option>
+                                    <option value="created">{% trans 'Հին ավելացվածները' %}</option>
+                                    <option value="-created">{% trans 'Վերջին ավելացվածները' %}</option>
+                                </select>
+                            </div>
+                            {% endif %}
 
+                        </div>
                         <!-- search result no -->
-                        {% if products.count == 0 %}
+                        {% if page_product.count == 0 %}
                         <div class="empty-search text-center">
                             <i class="noSearch_empty "></i>
                             <p>{% trans 'Մենք չկարողացանք գտնել' %} <b>{{ q }}</b> {% trans 'բառի որոնմանը համապատասխանող որևէ բան:' %}</p>
@@ -101,11 +161,12 @@
 
                         <!-- search result yes -->
                         <div class="full-search">
-                            {% if products.count > 0 %}
-                            {% include 'includes/view-mode.html' %}
-                            {% endif %}
+                            
+                            <div class="loader mt-5" id="loaderProducts" style="display: none;"></div>
+                            
                             <div id="products-cont">
                                 <div class="row full-ban">
+                                    
                                     {% for product in page_product %}
 
                                     <div class="col col-3">
@@ -129,8 +190,8 @@
     <!-- Main content end -->
 
     <!-- Footer -->
-    {% include 'includes/footer.html' %}
-    {% include 'includes/menu.html' %}
+      {% include 'includes/footer.html' %} {% include 'includes/menu.html' %}
+
    
     <!--Menu end -->
 
@@ -138,10 +199,19 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
+    
     <script src="{% static 'js/script.js' %}"></script>
+    {% if '/sales/' in request.get_full_path %}
+    <script src="{% static 'javascript/filters.js' %}"></script>
+    {% endif %}
     <script src="{% static 'javascript/add-to-cart.js' %}"></script>
-    <script src="{% static 'javascript/wish.js' %}"></script>
+    <script src="{% static 'javascript/wish.js' %}"></script> 
+    <script>
+         if (!!window.performance && window.performance.navigation.type === 2) {
+            console.log('Reloading');
+            window.location.reload();
+        }
+    </script>
 
 </body>
 
